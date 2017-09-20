@@ -1,0 +1,245 @@
+mysql> insert into company_details values(1,'google','google123@gmail.com','A 42,plaza,parel,Mumbai','');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into company_details values(7,'microsoft','microsoft123@gmail.com','A 17,kormangala,Bengaluru','');
+ERROR 1406 (22001): Data too long for column 'company_email' at row 1
+mysql> insert into company_details values(7,'microsoft','microsoft@gmail.com','A 17,kormangala,Bengaluru','');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into company_details values(2,'Intel','Intel@gmail.com','A 21,Hitechcity,Bengaluru','');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into company_details values(3,'BHEL','bhel@gmail.com','A 2,gindi,chennai','');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into company_details values(4,'hyndai','hyndai@gmail.com','A 32,Chennai,Tamil Nadu','');
+Query OK, 1 row affected (0.40 sec)
+
+mysql> insert into company_details values(5,'Surya Groups','surya@gmail.com','A 5,kolkata,West Bengal','');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into company_details values(6,'ECIL','ecil@gmail.com','A 5,gachiboli,hyderabad','');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into company_details values(8,'CISCO','cisco@gmail.com','B 5,madhapur,Andhra Pradesh','');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into company_details values(9,'Mahindra','mahindra@gmail.com','D 5,,Andhra Pradesh','');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select *from company_details;
++------------+--------------+---------------------+-----------------------------+-------------+
+| company_id | company_name | company_email       | address                     | description |
++------------+--------------+---------------------+-----------------------------+-------------+
+|          1 | google       | google123@gmail.com | A 42,plaza,parel,Mumbai     |             |
+|          2 | Intel        | Intel@gmail.com     | A 21,Hitechcity,Bengaluru   |             |
+|          3 | BHEL         | bhel@gmail.com      | A 2,gindi,chennai           |             |
+|          4 | hyndai       | hyndai@gmail.com    | A 32,Chennai,Tamil Nadu     |             |
+|          5 | Surya Groups | surya@gmail.com     | A 5,kolkata,West Bengal     |             |
+|          6 | ECIL         | ecil@gmail.com      | A 5,gachiboli,hyderabad     |             |
+|          7 | microsoft    | microsoft@gmail.com | A 17,kormangala,Bengaluru   |             |
+|          8 | CISCO        | cisco@gmail.com     | B 5,madhapur,Andhra Pradesh |             |
+|          9 | Mahindra     | mahindra@gmail.com  | D 5,,Andhra Pradesh         |             |
++------------+--------------+---------------------+-----------------------------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> insert into company_details values(10,'Apple','apple@gmail.com','D 15,Hitechcity,Telangana','');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into contact_details values(1,'Rajat Kunj','rajat@yahoo.co.in','9999234918');
+ERROR 1406 (22001): Data too long for column 'contact_number' at row 1
+mysql> insert into contact_details values(1,'Rajat Kunj','rajat@yahoo.co.in','999923491');
+ERROR 1406 (22001): Data too long for column 'contact_number' at row 1
+mysql> insert into contact_details values(1,'Rajat Kunj','rajat@yahoo.co.in','999923491');
+ERROR 1406 (22001): Data too long for column 'contact_number' at row 1
+mysql> insert into contact_details values(1,'Rajat Kunj','rajat@yahoo.co.in','999923');
+ERROR 1406 (22001): Data too long for column 'contact_number' at row 1
+mysql> insert into contact_details values(1,'Rajat Kunj','9999234918','rajat@yahoo.co.in');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into contact_details values(2,'Keerti khanna','9999234945','keerti@yahoo.co.in');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into contact_details values(2,'Riya Sen','9999237945','riya@gmail.co.in');
+ERROR 1062 (23000): Duplicate entry '2' for key 'PRIMARY'
+mysql> insert into contact_details values(3,'Riya Sen','9999237945','riya@gmail.co.in');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into contact_details values(4,'roshan bhat','9939237945','roshan@gmail.com');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into contact_details values(5,'Suraj Sharma','9939237345','suraj@gmail.com');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into contact_details values(6,'Parul Verma','9939232345','parul@gmail.com');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into contact_details values(7,'Anaya Prakash','8939232345','ana@gmail.com');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into contact_details values(8,'Vipul Rakesh','8931232345','vipul@gmail.com');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into contact_details values(9,'Sonal Shah','8931232345','sonal@yahoo.com');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into contact_details values(10,'Karthik Kapur','8931032345','karthik@yahoo.com');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from contact_details;
++------------+---------------+----------------+--------------------+
+| company_id | contact_name  | contact_number | contact_email      |
++------------+---------------+----------------+--------------------+
+|          1 | Rajat Kunj    | 9999234918     | rajat@yahoo.co.in  |
+|          2 | Keerti khanna | 9999234945     | keerti@yahoo.co.in |
+|          3 | Riya Sen      | 9999237945     | riya@gmail.co.in   |
+|          4 | roshan bhat   | 9939237945     | roshan@gmail.com   |
+|          5 | Suraj Sharma  | 9939237345     | suraj@gmail.com    |
+|          6 | Parul Verma   | 9939232345     | parul@gmail.com    |
+|          7 | Anaya Prakash | 8939232345     | ana@gmail.com      |
+|          8 | Vipul Rakesh  | 8931232345     | vipul@gmail.com    |
+|          9 | Sonal Shah    | 8931232345     | sonal@yahoo.com    |
+|         10 | Karthik Kapur | 8931032345     | karthik@yahoo.com  |
++------------+---------------+----------------+--------------------+
+10 rows in set (0.00 sec)
+
+mysql> insert into hiring_details values(1,'09:30:00','2017-12-3','Y');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into hiring_details values(2,'10:15:00','2017-7-6','N');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into hiring_details values(3,'10:36:00','2017-7-6','Y');
+Query OK, 1 row affected (0.40 sec)
+
+mysql> insert into hiring_details values(4,'10:36:00','2017-5-6','Y');
+Query OK, 1 row affected (0.38 sec)
+
+mysql> insert into hiring_details values(5,'13:OO:00','2017-5-6','N');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into hiring_details values(6,'13:45:00','2017-8-6','N');
+Query OK, 1 row affected (0.35 sec)
+
+mysql> insert into hiring_details values(7,'13:45:00','2017-8-6','N');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into hiring_details values(8,'13:45:00','2017-8-16','Y');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into hiring_details values(9,'09:45:00','2017-8-16','Y');
+Query OK, 1 row affected (0.87 sec)
+
+mysql> insert into hiring_details values(10,'09:00:00','2017-8-1','N');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into hiring_details values(11,'09:30:00','2017-8-13','N');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> SELECT * FROM hiring_details;
++--------+----------+------------+-----------+
+| job_id | time     | date       | on_campus |
++--------+----------+------------+-----------+
+|      1 | 09:30:00 | 2017-12-03 | Y         |
+|      2 | 10:15:00 | 2017-07-06 | N         |
+|      3 | 10:36:00 | 2017-07-06 | Y         |
+|      4 | 10:36:00 | 2017-05-06 | Y         |
+|      5 | 13:OO:00 | 2017-05-06 | N         |
+|      6 | 13:45:00 | 2017-08-06 | N         |
+|      7 | 13:45:00 | 2017-08-06 | N         |
+|      8 | 13:45:00 | 2017-08-16 | Y         |
+|      9 | 09:45:00 | 2017-08-16 | Y         |
+|     10 | 09:00:00 | 2017-08-01 | N         |
+|     11 | 09:30:00 | 2017-08-13 | N         |
++--------+----------+------------+-----------+
+11 rows in set (0.00 sec)
+
+mysql> insert into hiring_details values(12,'09:50:00','2017-9-13','Y');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into hiring_details values(13,'09:50:00','2017-9-13','Y');
+Query OK, 1 row affected (0.11 sec)
+
+mysql> insert into hiring_details values(14,'11:00:00','2017-9-13','Y');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> insert into hiring_details values(15,'08:00:00','2017-9-11','N');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into hiring_details values(16,'08:30:00','2017-9-11','N');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into hiring_details values(17,'08:40:00','2017-9-11','Y');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into hiring_details values(18,'08:00:00','2017-9-19','Y');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> insert into hiring_details values(19,'09:00:00','2017-9-18','N');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> SELECT * FROM hiring_details;
++--------+----------+------------+-----------+
+| job_id | time     | date       | on_campus |
++--------+----------+------------+-----------+
+|      1 | 09:30:00 | 2017-12-03 | Y         |
+|      2 | 10:15:00 | 2017-07-06 | N         |
+|      3 | 10:36:00 | 2017-07-06 | Y         |
+|      4 | 10:36:00 | 2017-05-06 | Y         |
+|      5 | 13:OO:00 | 2017-05-06 | N         |
+|      6 | 13:45:00 | 2017-08-06 | N         |
+|      7 | 13:45:00 | 2017-08-06 | N         |
+|      8 | 13:45:00 | 2017-08-16 | Y         |
+|      9 | 09:45:00 | 2017-08-16 | Y         |
+|     10 | 09:00:00 | 2017-08-01 | N         |
+|     11 | 09:30:00 | 2017-08-13 | N         |
+|     12 | 09:50:00 | 2017-09-13 | Y         |
+|     13 | 09:50:00 | 2017-09-13 | Y         |
+|     14 | 11:00:00 | 2017-09-13 | Y         |
+|     15 | 08:00:00 | 2017-09-11 | N         |
+|     16 | 08:30:00 | 2017-09-11 | N         |
+|     17 | 08:40:00 | 2017-09-11 | Y         |
+|     18 | 08:00:00 | 2017-09-19 | Y         |
+|     19 | 09:00:00 | 2017-09-18 | N         |
++--------+----------+------------+-----------+
+19 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CONTACT_details;
+ERROR 1146 (42S02): Table 'companies.CONTACT_details' doesn't exist
+mysql> SELECT * FROM contact__details;
+ERROR 1146 (42S02): Table 'companies.contact__details' doesn't exist
+mysql> SELECT * FROM contact_details;
++------------+---------------+----------------+--------------------+
+| company_id | contact_name  | contact_number | contact_email      |
++------------+---------------+----------------+--------------------+
+|          1 | Rajat Kunj    | 9999234918     | rajat@yahoo.co.in  |
+|          2 | Keerti khanna | 9999234945     | keerti@yahoo.co.in |
+|          3 | Riya Sen      | 9999237945     | riya@gmail.co.in   |
+|          4 | roshan bhat   | 9939237945     | roshan@gmail.com   |
+|          5 | Suraj Sharma  | 9939237345     | suraj@gmail.com    |
+|          6 | Parul Verma   | 9939232345     | parul@gmail.com    |
+|          7 | Anaya Prakash | 8939232345     | ana@gmail.com      |
+|          8 | Vipul Rakesh  | 8931232345     | vipul@gmail.com    |
+|          9 | Sonal Shah    | 8931232345     | sonal@yahoo.com    |
+|         10 | Karthik Kapur | 8931032345     | karthik@yahoo.com  |
++------------+---------------+----------------+--------------------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM company_details;
++------------+--------------+---------------------+-----------------------------+-------------+
+| company_id | company_name | company_email       | address                     | description |
++------------+--------------+---------------------+-----------------------------+-------------+
+|          1 | google       | google123@gmail.com | A 42,plaza,parel,Mumbai     |             |
+|          2 | Intel        | Intel@gmail.com     | A 21,Hitechcity,Bengaluru   |             |
+|          3 | BHEL         | bhel@gmail.com      | A 2,gindi,chennai           |             |
+|          4 | hyndai       | hyndai@gmail.com    | A 32,Chennai,Tamil Nadu     |             |
+|          5 | Surya Groups | surya@gmail.com     | A 5,kolkata,West Bengal     |             |
+|          6 | ECIL         | ecil@gmail.com      | A 5,gachiboli,hyderabad     |             |
+|          7 | microsoft    | microsoft@gmail.com | A 17,kormangala,Bengaluru   |             |
+|          8 | CISCO        | cisco@gmail.com     | B 5,madhapur,Andhra Pradesh |             |
+|          9 | Mahindra     | mahindra@gmail.com  | D 5,,Andhra Pradesh         |             |
+|         10 | Apple        | apple@gmail.com     | D 15,Hitechcity,Telangana   |             |
++------------+--------------+---------------------+-----------------------------+-------------+
+10 rows in set (0.00 sec)
+
+mysql> 

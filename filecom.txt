@@ -1,0 +1,535 @@
+mysql> select*from employ
+    -> select*from employ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select*from employ' at line 2
+mysql>  select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   4500 |        15 |               24 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  25000 |        21 |               20 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  59000 |      NULL |               24 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  45000 |      NULL |               20 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+5 rows in set (0.04 sec)
+
+mysql>  select*from department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql>  select*from DEPT_NO;
+ERROR 1146 (42S02): Table 'company.DEPT_NO' doesn't exist
+mysql>  select*from DEPT_LOCATION;
++-----+-----------+
+| DNO | DLOCATION |
++-----+-----------+
+|   1 | jaipur    |
+|   3 | surat     |
+|  12 | hyderabad |
+|  14 | bangalore |
+|  20 | chennai   |
+|  24 | delhi     |
++-----+-----------+
+6 rows in set (0.00 sec)
+
+mysql>  select*from project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| life            |      4 | delhi        |     24 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+6 rows in set (0.00 sec)
+
+mysql>  select*from WORKS_ON;
++------+----------+-------+
+| Essn | PRONAME  | HOURS |
++------+----------+-------+
+|    5 | producty |    15 |
++------+----------+-------+
+1 row in set (0.00 sec)
+
+mysql>  select*from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into WORKS_ON values(7,life,30);
+ERROR 1054 (42S22): Unknown column 'life' in 'field list'
+mysql> insert into WORKS_ON values(7,'life',30);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into WORKS_ON values(12,'innovate',30);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into WORKS_ON values(15,'innovate',12);
+Query OK, 1 row affected (0.03 sec)
+
+mysql>  select*from WORKS_ON;
++------+----------+-------+
+| Essn | PRONAME  | HOURS |
++------+----------+-------+
+|    5 | producty |    15 |
+|    7 | life     |    30 |
+|   12 | innovate |    30 |
+|   15 | innovate |    12 |
++------+----------+-------+
+4 rows in set (0.00 sec)
+
+mysql> alter table add constraint foreign key(SUPER_SSN) REFERENCES employ(SSN);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'add constraint foreign key(SUPER_SSN) REFERENCES employ(SSN)' at line 1
+mysql> alter table employ add constraint foreign key(SUPER_SSN) REFERENCES employ(SSN);
+Query OK, 5 rows affected (0.72 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> alter table department add constraint foreign key(MANAGERSSN) REFERENCES employ(SSN);
+Query OK, 6 rows affected (0.71 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> alter table employ add constraint foreign key(DEPARTMENTNUMBER) REFERENCES department(DEPNO);
+Query OK, 5 rows affected (0.94 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> alter table DEPT_LOCATION add constraint foreign key(DNO) REFERENCES department(DEPNO);
+Query OK, 6 rows affected (0.71 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> alter table project  add constraint foreign key(DEPNUM) REFERENCES department(DEPNO);
+Query OK, 6 rows affected (0.87 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> alter table WORKS_ON  add constraint foreign key(Essn) REFERENCES employ(SSN);
+Query OK, 4 rows affected (0.83 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> alter table dependent  add constraint foreign key(ESSN) REFERENCES employ(SSN);
+Query OK, 5 rows affected (0.68 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> alter table WORKS_ON  add constraint foreign key(PRONAME) REFERENCES project(PROJNAME);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> alter table WORKS_ON  add constraint foreign key(PRONAME) REFERENCES project(PROJNAME);
+ERROR 1215 (HY000): Cannot add foreign key constraint
+mysql> ALTER TABLE WORKS_ON ADD COLUMN PRONO int;
+Query OK, 0 rows affected (0.93 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE WORKS_ON 
+    -> SET PRONO=5
+    -> WHERE Essn=5;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE WORKS_ON  SET PRONO=4 WHERE Essn=7;
+Query OK, 1 row affected (0.06 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE WORKS_ON  SET PRONO=2 WHERE Essn=12& Essn=15;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE WORKS_ON  SET PRONO=2 WHERE Essn=12 and Essn=15;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE WORKS_ON  SET PRONO=2 WHERE Essn=12 | Essn=15;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> UPDATE WORKS_ON  SET PRONO=2 WHERE Essn=12 ;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE WORKS_ON  SET PRONO=2 WHERE Essn=15 ;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM WORKS_ON;
++------+----------+-------+-------+
+| Essn | PRONAME  | HOURS | PRONO |
++------+----------+-------+-------+
+|    5 | producty |    15 |     5 |
+|    7 | life     |    30 |     4 |
+|   12 | innovate |    30 |     2 |
+|   15 | innovate |    12 |     2 |
++------+----------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE WORKS_ON DROP PRONAME;
+Query OK, 0 rows affected (0.62 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM WORKS_ON;
++------+-------+-------+
+| Essn | HOURS | PRONO |
++------+-------+-------+
+|    5 |    15 |     5 |
+|    7 |    30 |     4 |
+|   12 |    30 |     2 |
+|   15 |    12 |     2 |
++------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE WORKS_ON add constraint foreign key(prono) references project(projno);
+Query OK, 4 rows affected (0.75 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select*from employ
+    -> where gender='male'and departmentnumber=14;
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE | ADDRESS | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER |
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978 | Mumbai  | male   |  59000 |      NULL |               14 |
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+
+1 row in set (0.01 sec)
+
+mysql> alter table employ add column MOBILE_NO int;
+Query OK, 0 rows affected (0.87 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> update employ set mobile_no=9989799521
+    -> where ssn=5;
+ERROR 1264 (22003): Out of range value for column 'MOBILE_NO' at row 1
+mysql> update employ set mobile_no=9989799521 where ssn=5;
+ERROR 1264 (22003): Out of range value for column 'MOBILE_NO' at row 1
+mysql> update employ set mobile_no=9989799 where ssn=5;
+Query OK, 1 row affected (0.12 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employ set mobile_no=99897993 where ssn=7;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employ set mobile_no=998979934 where ssn=12;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employ set mobile_no=9989799342 where ssn=15;
+ERROR 1264 (22003): Out of range value for column 'MOBILE_NO' at row 1
+mysql> update employ set mobile_no=998979342 where ssn=15;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employ set mobile_no=998979142 where ssn=21;
+Query OK, 1 row affected (0.05 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   4500 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  25000 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  59000 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  45000 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> update employ set salary=1.3*salary
+    -> where departmentnumber=24 and departmentnumber=20;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update employ set salary=1.3*salary where departmentnumber=24 or  departmentnumber=20;
+Query OK, 4 rows affected (0.07 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   5850 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  32500 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  76700 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  58500 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select depno ,depname,managerssn,firstname from department,employ 
+    -> where managerssn=ssn;
++-------+-----------+------------+-----------+
+| depno | depname   | managerssn | firstname |
++-------+-----------+------------+-----------+
+|    14 | Science   |          5 | Nikhil    |
+|    12 | Astronomy |          7 | Rupesh    |
+|     3 | Computers |         12 | John      |
+|    24 | Research  |         15 | Rimi      |
+|    20 | Design    |         21 | Shalini   |
++-------+-----------+------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select birthday,address from employ
+    -> where firstname='rimi';
+ERROR 1054 (42S22): Unknown column 'birthday' in 'field list'
+mysql> select birthdate,address from employ where firstname='rimi';
++-----------+---------+
+| birthdate | address |
++-----------+---------+
+| 12-7-1988 | Orissa  |
++-----------+---------+
+1 row in set (0.01 sec)
+
+mysql> select firstname from employ where firstname like 'e%';
+Empty set (0.00 sec)
+
+mysql> select firstname from employ where firstname like 'r%';
++-----------+
+| firstname |
++-----------+
+| Rupesh    |
+| Rimi      |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> select firstname,depname from employ,department
+    -> where sal<10000;
+ERROR 1054 (42S22): Unknown column 'sal' in 'where clause'
+mysql> select firstname,depname from employ,department where salary<10000;
++-----------+-----------+
+| firstname | depname   |
++-----------+-----------+
+| Rupesh    | Math      |
+| Rupesh    | Computers |
+| Rupesh    | Astronomy |
+| Rupesh    | Science   |
+| Rupesh    | Design    |
+| Rupesh    | Research  |
++-----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select firstname,depname from employ,department where salary<10000 &&departmentnumber=depno;
++-----------+----------+
+| firstname | depname  |
++-----------+----------+
+| Rupesh    | Research |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select firstname ,address from employ 
+    -> where departmentnumber=depno && depname=computers;
+ERROR 1054 (42S22): Unknown column 'depno' in 'where clause'
+mysql> select firstname ,address from employ,department  where departmentnumber=depno && depname=computers;
+ERROR 1054 (42S22): Unknown column 'computers' in 'where clause'
+mysql> 
+mysql> select firstname ,address from employ,department  where departmentnumber=depno && depname='computers';
+Empty set (0.00 sec)
+
+mysql> select firstname ,address from employ,department  where departmentnumber=depno && depname='research';
++-----------+---------+
+| firstname | address |
++-----------+---------+
+| Rupesh    | Mumbai  |
+| Rimi      | Orissa  |
++-----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> delete *from employ where salary>50000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*from employ where salary>50000' at line 1
+mysql> delete from employ where salary>50000;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`company`.`WORKS_ON`, CONSTRAINT `WORKS_ON_ibfk_1` FOREIGN KEY (`Essn`) REFERENCES `employ` (`SSN`))
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   5850 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  32500 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  76700 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  58500 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select*from department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select*from dept_no;
+ERROR 1146 (42S02): Table 'company.dept_no' doesn't exist
+mysql> select*from dept_location;
+ERROR 1146 (42S02): Table 'company.dept_location' doesn't exist
+mysql> select*from DEPT_LOCATION;
++-----+-----------+
+| DNO | DLOCATION |
++-----+-----------+
+|   1 | jaipur    |
+|   3 | surat     |
+|  12 | hyderabad |
+|  14 | bangalore |
+|  20 | chennai   |
+|  24 | delhi     |
++-----+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select*from project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| life            |      4 | delhi        |     24 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select*from WORKS_ON;
++------+-------+-------+
+| Essn | HOURS | PRONO |
++------+-------+-------+
+|    5 |    15 |     5 |
+|    7 |    30 |     4 |
+|   12 |    30 |     2 |
+|   15 |    12 |     2 |
++------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select*from DEPENDENT;
+ERROR 1146 (42S02): Table 'company.DEPENDENT' doesn't exist
+mysql> select*from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select*from employ where gender='male'and departmentnumber=14;
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE | ADDRESS | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978 | Mumbai  | male   |  59000 |      NULL |               14 |   9989799 |
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+-----------+
+1 row in set (0.00 sec)
+
+mysql> update employ set salary=1.3*salary
+    -> where departmentnumber=24 and departmentnumber=20;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> update employ set salary=1.3*salary where departmentnumber=24 or  departmentnumber=20;
+Query OK, 4 rows affected (0.06 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select depno ,depname,managerssn,firstname from department,employ  where managerssn=ssn;
++-------+-----------+------------+-----------+
+| depno | depname   | managerssn | firstname |
++-------+-----------+------------+-----------+
+|    14 | Science   |          5 | Nikhil    |
+|    12 | Astronomy |          7 | Rupesh    |
+|     3 | Computers |         12 | John      |
+|    24 | Research  |         15 | Rimi      |
+|    20 | Design    |         21 | Shalini   |
++-------+-----------+------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select birthday,address from employ where firstname='rimi';
+ERROR 1054 (42S22): Unknown column 'birthday' in 'field list'
+mysql> select birthdate,address from employ where firstname='rimi';
++-----------+---------+
+| birthdate | address |
++-----------+---------+
+| 12-7-1988 | Orissa  |
++-----------+---------+
+1 row in set (0.00 sec)
+
+mysql> select firstname from employ where firstname like 'r%';
++-----------+
+| firstname |
++-----------+
+| Rupesh    |
+| Rimi      |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> select firstname,depname from employ,department where sal<10000;
+ERROR 1054 (42S22): Unknown column 'sal' in 'where clause'
+mysql> select firstname,depname from employ,department where salary<10000;
++-----------+-----------+
+| firstname | depname   |
++-----------+-----------+
+| Rupesh    | Math      |
+| Rupesh    | Computers |
+| Rupesh    | Astronomy |
+| Rupesh    | Science   |
+| Rupesh    | Design    |
+| Rupesh    | Research  |
++-----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select firstname,depname from employ,department where salary<10000 &&departmentnumber=depno;
++-----------+----------+
+| firstname | depname  |
++-----------+----------+
+| Rupesh    | Research |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select firstname ,address from employ,department  where departmentnumber=depno && depname='research';
++-----------+---------+
+| firstname | address |
++-----------+---------+
+| Rupesh    | Mumbai  |
+| Rimi      | Orissa  |
++-----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> delete *from employ where salary>50000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '*from employ where salary>50000' at line 1
+ 
+ 

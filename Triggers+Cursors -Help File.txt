@@ -1,0 +1,496 @@
+________________________________________________
+
+		INSERT TRIGGER
+________________________________________________
+mysql> CREATE TABLE account (acct_num INT, amount DECIMAL(10,2));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> CREATE TRIGGER ins_sum BEFORE INSERT ON account
+    -> FOR EACH ROW SET @sum = @sum + NEW.amount;
+
+mysql> SET @sum = 0;
+mysql> INSERT INTO account VALUES(137,14.98),(141,1937.50),(97,-100.00);
+mysql> SELECT @sum;
++-----------------------+
+|                  @sum |
++-----------------------+
+| 1852.48               |
++-----------------------+
+
+________________________________________________
+
+		UPDATE TRIGGER
+________________________________________________
+
+mysql> delimiter // /***** HERE we change the delimiter to // such that the sql statement will not be executed when ; is encountered *****/
+
+CREATE TRIGGER upd_check BEFORE UPDATE ON employee
+    FOR EACH ROW /****** Trigger runs for every row. ‘For each Statement’ represents trigger running only once.
+    BEGIN
+        IF NEW.salary < 5000 THEN
+            SET NEW.salary = 5000;
+        END IF;
+    END;//
+
+mysql> select * from employee ;//
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+| ssn | first_name | middle_name | last_name   | gender | salary | superssn | dept_no | mobile_no  | dob        |
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+| 1   | Shreya     |             | Suresh      | F      |  99999 | 10       |       1 | 7200993739 | 1997-01-12 |
+| 10  | Aishwarya  | R           | Raj         | F      |    129 | 10       |       4 | 9841226738 | 1997-01-12 |
+| 2   | Sanjana    | S           | Sankar      | F      |  12999 | 20       |       2 | 8841226738 | 1997-01-02 |
+| 20  | Sowbarnika | S           | Ram         | F      |    999 | 20       |       5 | 9741222738 | 1997-03-10 |
+| 3   | Abinaya    | S           | Subramaniam | F      |   1299 | 20       |       2 | 9901347738 | 1997-08-08 |
+| 30  | Shiv       | S           | Vidhyut     | M      |   9999 | 30       |       1 | 9201341038 | 1997-10-16 |
+| 4   | Amrutha    | S           | Manhoharan  | F      |    129 | 20       |       2 | 7201341032 | 1997-06-24 |
+| 5   | Suraj      | Rao         | Suresh      | M      | 100000 | 5        |       5 | 9230184902 | 1997-03-16 |
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+8 rows in set (0.00 sec)
+mysql> update employee set salary = 100 where salary = 129//
+Query OK, 2 rows affected (0.03 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from employee ;//
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+| ssn | first_name | middle_name | last_name   | gender | salary | superssn | dept_no | mobile_no  | dob        |
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+| 1   | Shreya     |             | Suresh      | F      |  99999 | 10       |       1 | 7200993739 | 1997-01-12 |
+| 10  | Aishwarya  | R           | Raj         | F      |   5000 | 10       |       4 | 9841226738 | 1997-01-12 |
+| 2   | Sanjana    | S           | Sankar      | F      |  12999 | 20       |       2 | 8841226738 | 1997-01-02 |
+| 20  | Sowbarnika | S           | Ram         | F      |    999 | 20       |       5 | 9741222738 | 1997-03-10 |
+| 3   | Abinaya    | S           | Subramaniam | F      |   1299 | 20       |       2 | 9901347738 | 1997-08-08 |
+| 30  | Shiv       | S           | Vidhyut     | M      |   9999 | 30       |       1 | 9201341038 | 1997-10-16 |
+| 4   | Amrutha    | S           | Manhoharan  | F      |   5000 | 20       |       2 | 7201341032 | 1997-06-24 |
+| 5   | Suraj      | Rao         | Suresh      | M      | 100000 | 5        |       5 | 9230184902 | 1997-03-16 |
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+8 rows in set (0.00 sec)
+
+mysql> update employee set salary = 100 where salary <5000//
+Query OK, 2 rows affected (0.03 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from employee ;//
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+| ssn | first_name | middle_name | last_name   | gender | salary | superssn | dept_no | mobile_no  | dob        |
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+| 1   | Shreya     |             | Suresh      | F      |  99999 | 10       |       1 | 7200993739 | 1997-01-12 |
+| 10  | Aishwarya  | R           | Raj         | F      |   5000 | 10       |       4 | 9841226738 | 1997-01-12 |
+| 2   | Sanjana    | S           | Sankar      | F      |  12999 | 20       |       2 | 8841226738 | 1997-01-02 |
+| 20  | Sowbarnika | S           | Ram         | F      |   5000 | 20       |       5 | 9741222738 | 1997-03-10 |
+| 3   | Abinaya    | S           | Subramaniam | F      |   5000 | 20       |       2 | 9901347738 | 1997-08-08 |
+| 30  | Shiv       | S           | Vidhyut     | M      |   9999 | 30       |       1 | 9201341038 | 1997-10-16 |
+| 4   | Amrutha    | S           | Manhoharan  | F      |   5000 | 20       |       2 | 7201341032 | 1997-06-24 |
+| 5   | Suraj      | Rao         | Suresh      | M      | 100000 | 5        |       5 | 9230184902 | 1997-03-16 |
++-----+------------+-------------+-------------+--------+--------+----------+---------+------------+------------+
+8 rows in set (0.00 sec)
+
+
+
+_________________________________________________________________
+
+		TRIGGERS ON FLIGHT SCHEMA
+_________________________________________________________________
+use flight
+Database changed
+mysql> delimiter //
+mysql> CREATE TRIGGER upd_check BEFORE UPDATE ON AIRCRAFT
+    -> FOR EACH ROW
+    -> BEGIN
+    -> IF NEW.cruisingrange >= 5000 THEN /**** NEW contains newly updated values of the tuple***/
+    -> BEGIN
+    -> UPDATE EMPLOYEE e SET salary=salary+1000 where eid in (select c.eid from CERTIFIED c, AIRCRAFT a where e.eid=c.eid and c.aid=a.aid and a.aid=NEW.aid); 
+    -> END;
+    -> END IF;
+    -> END;
+    -> //
+Query OK, 0 rows affected (0.33 sec)
+
+mysql> delimiter ; /*** delimiter changed back to ;
+mysql> select * from EMPLOYEE;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | john   |  11000 |
+|   2 | ganesh |  31000 |
+|   3 | raj    |  21000 |
+|   4 | paul   |  12000 |
+|   5 | yamuna |  10000 |
+|   6 | saran  |  22000 |
+|   7 | joseph |  32000 |
+|   8 | balu   |  25000 |
++-----+--------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select * from AIRCRAFT;
++-----+---------+---------------+
+| aid | aname   | cruisingrange |
++-----+---------+---------------+
+| 100 | luxe    |          2000 |
+| 101 | boeing  |          1000 |
+| 102 | dudberg |          3000 |
+| 103 | colonia |          2000 |
+| 104 | manila  |          4000 |
+| 105 | leaner  |          3000 |
++-----+---------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> update AIRCRAFT set cruisingrange = 5000 where amane='luxe';
+ERROR 1054 (42S22): Unknown column 'amane' in 'where clause'
+mysql> update AIRCRAFT set cruisingrange = 5000 where aname='luxe';
+Query OK, 1 row affected (0.13 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from AIRCRAFT;
++-----+---------+---------------+
+| aid | aname   | cruisingrange |
++-----+---------+---------------+
+| 100 | luxe    |          5000 |/**** cruisingrange updated***/
+| 101 | boeing  |          1000 |
+| 102 | dudberg |          3000 |
+| 103 | colonia |          2000 |
+| 104 | manila  |          4000 |
+| 105 | leaner  |          3000 |
++-----+---------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from EMPLOYEE;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | john   |  11000 |
+|   2 | ganesh |  31000 |
+|   3 | raj    |  22000 |/*** raj’s salary incremented ***/
+|   4 | paul   |  12000 |
+|   5 | yamuna |  10000 |
+|   6 | saran  |  22000 |
+|   7 | joseph |  32000 |
+|   8 | balu   |  25000 |
++-----+--------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select * from CERTIFIED;
++-----+-----+
+| eid | aid |
++-----+-----+
+|   2 | 101 |
+|   3 | 100 |
+|   4 | 103 |
+|   6 | 102 |
+|   7 | 104 |
+|   8 | 105 |
++-----+-----+
+6 rows in set (0.00 sec)
+
+
+
+
+
+
+
+________________________________________________
+
+		UPDATE TRIGGER
+________________________________________________
+
+
+mysql> delimiter //
+mysql> CREATE TRIGGER del_cert AFTER DELETE ON EMPLOYEE    
+    -> FOR EACH ROW
+    -> BEGIN 
+    -> DELETE FROM CERTIFIED  WHERE eid = OLD.eid;/*** OLD holds deleted tuple from employee 
+    -> END;
+    -> //
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> select * from EMPLOYEE;
+    -> 
+    -> //
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | john   |  11000 |
+|   2 | ganesh |  31000 |
+|   3 | raj    |  22000 |
+|   4 | paul   |  12000 |
+|   5 | yamuna |  10000 |
+|   6 | saran  |  22000 |
+|   7 | joseph |  32000 |
+|   8 | balu   |  25000 |
++-----+--------+--------+
+8 rows in set (0.00 sec)
+
+mysql> delimiter ;
+mysql> select * from EMPLOYEE;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | john   |  11000 |
+|   2 | ganesh |  31000 |
+|   3 | raj    |  22000 |
+|   4 | paul   |  12000 |
+|   5 | yamuna |  10000 |
+|   6 | saran  |  22000 |
+|   7 | joseph |  32000 |
+|   8 | balu   |  25000 |
++-----+--------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select * from CERTIFIED;
++-----+-----+
+| eid | aid |
++-----+-----+
+|   2 | 101 |
+|   3 | 100 |
+|   4 | 103 |
+|   6 | 102 |
+|   7 | 104 |
+|   8 | 105 |/**** balu is certified for aid = 105***/
++-----+-----+
+6 rows in set (0.00 sec)
+
+mysql> delete from employee where ename = 'balu';
+ERROR 1146 (42S02): Table 'flight.employee' doesn't exist
+mysql> delete from EMPLOYEE where ename = 'balu';
+Query OK, 1 row affected (0.12 sec)
+
+mysql> select * from EMPLOYEE;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | john   |  11000 |
+|   2 | ganesh |  31000 |
+|   3 | raj    |  22000 |
+|   4 | paul   |  12000 |
+|   5 | yamuna |  10000 |
+|   6 | saran  |  22000 |
+|   7 | joseph |  32000 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select * from CERTIFIED;
++-----+-----+
+| eid | aid |
++-----+-----+
+|   2 | 101 |
+|   3 | 100 |
+|   4 | 103 |
+|   6 | 102 |
+|   7 | 104 |/**** balu’s certification is removed***/
++-----+-----+
+5 rows in set (0.00 sec)
+
+
+________________________________________________________________
+
+                           CURSORS
+________________________________________________________________
+mysql> desc test3//
++-------+---------+------+-----+---------+----------------+
+| Field | Type    | Null | Key | Default | Extra          |
++-------+---------+------+-----+---------+----------------+
+| a3    | int(11) | NO   | PRI | NULL    | auto_increment |
++-------+---------+------+-----+---------+----------------+
+1 row in set (0.00 sec)
+
+mysql> desc test4//
++-------+---------+------+-----+---------+----------------+
+| Field | Type    | Null | Key | Default | Extra          |
++-------+---------+------+-----+---------+----------------+
+| a4    | int(11) | NO   | PRI | NULL    | auto_increment |
+| b4    | int(11) | YES  |     | 0       |                |
++-------+---------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> desc test2//
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| a2    | int(11) | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> desc test1//
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| a1    | int(11) | YES  |     | NULL    |       |
++-------+---------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT a1 FROM test1;//
++------+
+| a1   |
++------+
+|    1 |
+|    3 |
+|    1 |
+|    7 |
+|    1 |
+|    8 |
+|    4 |
+|    4 |
++------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT a2 FROM test2;//
++------+
+| a2   |
++------+
+|    1 |
+|    3 |
+|    1 |
+|    7 |
+|    1 |
+|    8 |
+|    4 |
+|    4 |
++------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT a3 FROM test3;//
+Empty set (0.00 sec)
+
+
+
+CREATE PROCEDURE curdemo2()
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+  DECLARE a CHAR(16);
+  DECLARE b, c INT;
+  DECLARE cur1 CURSOR FOR SELECT a1 FROM test1;
+  DECLARE cur2 CURSOR FOR SELECT a2 FROM test2;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+  OPEN cur1;
+  OPEN cur2;
+
+  read_loop: LOOP
+    FETCH cur1 INTO b;
+    FETCH cur2 INTO c;
+    IF done THEN
+      LEAVE read_loop;
+    END IF;
+    IF b < c THEN
+      INSERT INTO test3 VALUES (c);
+    ELSE
+      INSERT INTO test3 VALUES (b);
+    END IF;
+  END LOOP;
+
+  CLOSE cur1;
+  CLOSE cur2;
+END;
+//
+mysql> call curdemo2//
+
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+mysql> select * FROM test3//
++----+
+| a3 |
++----+
+|  1 |
+|  3 |
++----+
+2 rows in set (0.00 sec)
+
+mysql> desc test3;
+    -> //
++-------+---------+------+-----+---------+----------------+
+| Field | Type    | Null | Key | Default | Extra          |
++-------+---------+------+-----+---------+----------------+
+| a3    | int(11) | NO   | PRI | NULL    | auto_increment |
++-------+---------+------+-----+---------+----------------+
+1 row in set (0.00 sec)
+_______________________________________________________________
+
+                     CURSORS EXAMPLE 2
+_______________________________________________________________
+
+
+mysql> select * from EMPLOYEE;
+    -> //
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | john   |  11000 |
+|   2 | ganesh |  31000 |
+|   3 | raj    |  23000 | /*** raj’s salary before executing the 
+|   4 | paul   |  12000 | procedure ***/
+|   5 | yamuna |  10000 |
+|   6 | saran  |  22000 |
+|   7 | joseph |  32000 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select * from AIRCRAFT//
++-----+---------+---------------+
+| aid | aname   | cruisingrange |
++-----+---------+---------------+
+| 100 | luxe    |          5000 |
+| 101 | boeing  |          1000 |
+| 102 | dudberg |          3000 |
+| 103 | colonia |          2000 |
+| 104 | manila  |          4000 |
+| 105 | leaner  |          3000 |
++-----+---------+---------------+
+6 rows in set (0.00 sec)
+
+
+mysql> DROP PROCEDURE cursor1 //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> 
+mysql> CREATE PROCEDURE cursor1(IN cruise int(10))
+    -> BEGIN
+    ->   DECLARE done INT DEFAULT FALSE; /*** done is loop control variable***/
+    ->   DECLARE b INT;
+    ->   DECLARE cur1 CURSOR FOR SELECT aid FROM AIRCRAFT WHERE cruisingrange>=cruise; /**** CURSOR Declaration***/
+    ->   DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE; /*** Loop control variable updation ***/
+    -> 
+    ->   OPEN cur1; /*** Opens a previously declared cursor ****/
+    -> 
+    ->   read_loop: LOOP
+    ->     FETCH cur1 INTO b; /***  fetches the next row for the SELECT statement associated with the specified cursor (which must be open), and advances the cursor pointer. If a row exists, the fetched columns are stored in the named variables. The number of columns retrieved by the SELECTstatement must match the number of output variables specified in the FETCH statement. ***/
+    -> 
+    ->     IF done THEN
+    ->       LEAVE read_loop;
+    ->     END IF;
+    -> 
+    ->     BEGIN
+    ->     UPDATE EMPLOYEE e SET salary=salary+1000 where eid in (select c.eid from CERTIFIED c, AIRCRAFT a where e.eid=c.eid and c.aid=a.aid and a.aid=b);
+    ->     
+    ->     END;
+    ->   END LOOP;
+    ->   CLOSE cur1; /*** Close the Cursor ***/
+    ->  
+    -> END;
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> set @a=5000;  /**** input parameter to procedure cursor1 ****/
+    -> //
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call cursor1(@a)//  /*** Calling Procedure cursor1 ***/
+Query OK, 0 rows affected, 1 warning (0.22 sec)
+
+mysql> select * from EMPLOYEE//
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | john   |  11000 |
+|   2 | ganesh |  31000 |
+|   3 | raj    |  24000 | /*** raj’s incremented salary ***/
+|   4 | paul   |  12000 |
+|   5 | yamuna |  10000 |
+|   6 | saran  |  22000 |
+|   7 | joseph |  32000 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+
+
+
+
+
+

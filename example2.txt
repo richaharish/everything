@@ -1,0 +1,656 @@
+ 
+ 
+mysql>  select* from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select E.firstname from employ E,department D where D.managerssn=E.ssn and exists (select * from dependent DE where DE.essn=D.managerssn ); 
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select firstname from dependent,employ ,department where ssn=managerssn and managerssn=essn;
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+5 rows in set (0.02 sec)
+
+mysql> select *from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select *from department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select firstname from employ where not exists((select projno from project where depnum=20 )except (select prono from WORKS_ON where essn=sn));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'except (select prono from WORKS_ON where essn=sn))' at line 1
+mysql> select firstname from employ where not exists((select projno from project where depnum=20 )except (select prono from WORKS_ON where essn=ssn));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'except (select prono from WORKS_ON where essn=ssn))' at line 1
+mysql> select firstname from employ where not exists((select projno from project where depnum=20 )except (select prono from WORKS_ON where essn=ssn));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'except (select prono from WORKS_ON where essn=ssn))' at line 1
+mysql> select firstname from employ where not exists((select projno from project where depnum=20 ) minus (select prono from WORKS_ON where essn=ssn));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'minus (select prono from WORKS_ON where essn=ssn))' at line 1
+mysql> select *from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> select D.depname ,count(E.ssn) from employ E ,department D group by departmentnumber having avg(salary)>30000;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.D.DEPNAME' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select D.depname ,count(E.ssn) from employ E ,department D group by departmentnumber having avg(salary)>30000and D.depno=E.departmentnumber;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'D.depno=E.departmentnumber' at line 1
+mysql> select D.depname ,count(E.ssn) from employ E ,department D group by departmentnumber having avg(salary)>30000 where D.depno=E.departmentnumber;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where D.depno=E.departmentnumber' at line 1
+mysql> select D.depname ,count(E.ssn) from employ E ,department D where D.depno=E.departmentnumber group by departmentnumber having avg(salary)>30000 ;
++----------+--------------+
+| depname  | count(E.ssn) |
++----------+--------------+
+| Science  |            1 |
+| Design   |            2 |
+| Research |            2 |
++----------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> select count(Ecount(ssn) from employ where gender='male' and salary >30000 group by departmentnumber;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employ where gender='male' and salary >30000 group by departmentnumber' at line 1
+mysql> select count(Ecount(ssn) from employ where gender='male' and salary >30000 group by departmentnumber;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employ where gender='male' and salary >30000 group by departmentnumber' at line 1
+mysql> select count(ssn) from employ where gender='male' and salary >30000 group by departmentnumber;
++------------+
+| count(ssn) |
++------------+
+|          1 |
+|          1 |
++------------+
+2 rows in set (0.00 sec)
+
+mysql> select count(ssn),departmentnumber  from employ where gender='male' and salary >30000 group by departmentnumber;
++------------+------------------+
+| count(ssn) | departmentnumber |
++------------+------------------+
+|          1 |               14 |
+|          1 |               20 |
++------------+------------------+
+2 rows in set (0.00 sec)
+
+mysql> select depname ,count(ssn) from employ,department where depno=departmentnumber and exists (select avg(salary) from employ where gender='male' group by departmentnumber)>30000;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.department.DEPNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> select depname ,count(ssn) from employ,department where  exists (select avg(salary) from employ where gender='male'and departmentnumber=depno group by departmentnumber)>30000;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.department.DEPNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> select depname,count(ssn) from employ where depno=departmentnumber and gender='male'and exists(select avg(salary) from employ group by departmentnumber)>30000;
+ERROR 1054 (42S22): Unknown column 'depname' in 'field list'
+mysql> select depname,count(ssn) from employ,department where depno=departmentnumber and gender='male'and exists(select avg(salary) from employ group by departmentnumber)>30000;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.department.DEPNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber gender='male' group by departmentnumber having avg(salary)>30000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'gender='male' group by departmentnumber having avg(salary)>30000' at line 1
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber gender,='male' group by departmentnumber having avg(salary)>30000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'gender,='male' group by departmentnumber having avg(salary)>30000' at line 1
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber, gender='male' group by departmentnumber having avg(salary)>30000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' gender='male' group by departmentnumber having avg(salary)>30000' at line 1
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber and gender='male' group by departmentnumber having avg(salary)>30000;
++---------+------------+
+| depname | count(ssn) |
++---------+------------+
+| Science |          1 |
+| Design  |          1 |
++---------+------------+
+2 rows in set (0.00 sec)
+
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber  group by departmentnumber having avg(salary)>30000;
++----------+------------+
+| depname  | count(ssn) |
++----------+------------+
+| Science  |          1 |
+| Design   |          2 |
+| Research |          2 |
++----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber and gender='male' and exists(select  avg(salary) from employ group by department )>30000 ;
+ERROR 1054 (42S22): Unknown column 'department' in 'group statement'
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber and gender='male' and exists(select  avg(salary) from employ group by departmentnumber )>30000 ;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.department.DEPNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber and gender='male' and exists(select * from employ group by departmentnumber having avg(salary)>30000 ) ;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.employ.FIRSTNAME' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber and gender='male' and exists(select salary from employ group by departmentnumber having avg(salary)>30000 ) ;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.employ.SALARY' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select depname ,count(ssn) from department ,employ where depno=departmentnumber and gender='male' and exists(select ssn from employ group by departmentnumber having avg(salary)>30000 ) ;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.employ.SSN' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select firstname from employ where departmentnumber in (select departmentnumber from employ group by departmentnumber having max(salary));
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select firstname from employ where departmentnumber in (select departmentnumber from employ  having max(salary));
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.employ.DEPARTMENTNUMBER'; this is incompatible with sql_mode=only_full_group_by
+mysql> select E.firstname from employ E where E.departmentnumber in  (select max(salary) from employ A where A.departmentnumber=E.departmentnumber);
+Empty set (0.00 sec)
+
+mysql> select E.firstname from employ E where E.departmentnumber in  (select A.departmentname from employ A group by ssn having max(salary));
+ERROR 1054 (42S22): Unknown column 'A.departmentname' in 'field list'
+mysql> select E.firstname from employ E where E.departmentnumber in  (select A.departmentnumber from employ A group by ssn having max(salary));
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select E.firstname from employ E where  (select A.departmentnumber from employ A group by ssn having max(salary));
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql> select department number from employ having max(salary);
+ERROR 1054 (42S22): Unknown column 'department' in 'field list'
+mysql> select departmentnumber from employ having max(salary);
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.employ.DEPARTMENTNUMBER'; this is incompatible with sql_mode=only_full_group_by
+mysql> select departmentnumber from employ group by ssn having max(salary);
++------------------+
+| departmentnumber |
++------------------+
+|               14 |
+|               24 |
+|               20 |
+|               24 |
+|               20 |
++------------------+
+5 rows in set (0.00 sec)
+
+mysql> select departmentnumber ,max(salary) from employ ;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.employ.DEPARTMENTNUMBER'; this is incompatible with sql_mode=only_full_group_by
+mysql> select max(salary) from employ ;
++-------------+
+| max(salary) |
++-------------+
+|       99710 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select E.firstname from employ E where  (selectmax(salary) from employ);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from employ)' at line 1
+mysql> select E.firstname from employ E where  (select max(salary) from employ);
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select E.firstname from employ E where departmentnumber in (select max(salary) from employ);
+Empty set (0.00 sec)
+
+mysql> select A.firstname from employ E where  (select max(salary) from employ A);
+ERROR 1054 (42S22): Unknown column 'A.firstname' in 'field list'
+mysql> select firstname from (select max(salary) from employ ) ;
+ERROR 1248 (42000): Every derived table must have its own alias
+mysql> select E.firstname from employ E where  (select max(salary) from employ where E.departmentnumber =departmentnumber );
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select  E.firstname from employ E where E.departmentnumber in (select A.departmentnumber from employ A where A.salary>(select salary from employ);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select  E.firstname from employ E where E.departmentnumber in (select A.departmentnumber from employ A where A.salary>all(select salary from employ);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select E.firstname from employ E where E.departmentnumber in (select A.departmentnumber from employ A where A.salary > ALL(select salaryrom employ);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select firstname from employ where salary> 1000+(select min(salary) from employ );
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+4 rows in set (0.00 sec)
+
+mysql> select firstname from employ where exists (select from WORKS_ON ,project where hours>10 and prono=projno and depnum=20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from WORKS_ON ,project where hours>10 and prono=projno and depnum=20)' at line 1
+mysql> select firstname from employ where exists (select Essn from WORKS_ON ,project where hours>10 and prono=projno and depnum=20);
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| Shalini   |
++-----------+
+5 rows in set (0.01 sec)
+
+mysql> select firstname from employ where ssn in (select Essn from WORKS_ON ,project where hours>10 and prono=projno and depnum=20);
++-----------+
+| firstname |
++-----------+
+| John      |
+| Rimi      |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> select firstname from employ where super_ssn in (select ssn from employ where firstname='shalini');
++-----------+
+| firstname |
++-----------+
+| John      |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select firstname from employ where ssn in (select essn from dependent where firstname=dependentname);
+Empty set (0.00 sec)
+
+mysql> select projname ,hours from project ,WORKS_ON  group by projname;
+ERROR 1055 (42000): Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.WORKS_ON.HOURS' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select projname ,hours from project ,WORKS_ON  group by projno;
+ERROR 1055 (42000): Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.WORKS_ON.HOURS' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select E.firstname from employ E where E.ssn in all(select W.Essn from WORKS_ON W group by prono);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'all(select W.Essn from WORKS_ON W group by prono)' at line 1
+mysql> select E.firstname from employ E where E.ssn in (select W.Essn from WORKS_ON W where W.prono=all(select prono from WORKS_ON ));
+Empty set (0.00 sec)
+
+mysql> select E.firstname from employ E where E.ssn IS in (select W.Essn from WORKS_ON W where W.prono=all(select prono from WORKS_ON ));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in (select W.Essn from WORKS_ON W where W.prono=all(select prono from WORKS_ON )' at line 1
+mysql> SELECT FIRSTNAME FROM employ WHERE NOT EXISTS(SELECT ESSN FROM WORKS_ON WHERE SSN=ESSN);
++-----------+
+| FIRSTNAME |
++-----------+
+| Shalini   |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AVG(SALARY) FROM employ WHERE GENDER='FEMALE' ;
++-------------+
+| AVG(SALARY) |
++-------------+
+|  87880.0000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AVG(SALARY) FROM employ WHERE GENDER='MALE' ;
++-------------+
+| AVG(SALARY) |
++-------------+
+|  36285.0000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT AVG(SALARY) FROM employ  ;
++-------------+
+| AVG(SALARY) |
++-------------+
+|  56923.0000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SEELCT * FROM department;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SEELCT * FROM department' at line 1
+mysql> SElECT * FROM department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| life            |      4 | delhi        |     24 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select * from dept_location;
+ERROR 1146 (42S02): Table 'company.dept_location' doesn't exist
+mysql> select * from DEPT_LOCATION;;
++-----+-----------+
+| DNO | DLOCATION |
++-----+-----------+
+|   1 | jaipur    |
+|   3 | surat     |
+|  12 | hyderabad |
+|  14 | bangalore |
+|  20 | chennai   |
+|  24 | delhi     |
++-----+-----------+
+6 rows in set (0.00 sec)
+
+ERROR: 
+No query specified
+
+mysql> SELECT FIRSTNAME,ADDRESS FROM employ where exists(select * from project,WORKS_ON where projlocation='delhi' and ssn=essn )and not exists (select*from project,DEPT_LOCATION  where DNO=DEPNUM AND DLOCATION='DELHI');
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME FROm employ where not exists (select managerssn from department,dependent where essn=managerssn and ssn=managerssn);
+Empty set (0.00 sec)
+
+mysql> select * from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select firstname from employ ,department where (depname='computers' and depno=departmentnumber ) or (depname='computers' and managerssn=ssn);
++-----------+
+| firstname |
++-----------+
+| John      |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select * from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select firstname from employ ,department where (depname='astronomy' and depno=departmentnumber ) or (depname='astronomy' and managerssn=ssn);
++-----------+
+| firstname |
++-----------+
+| Rupesh    |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select firstname from employ ,department where (depname='research' and depno=departmentnumber ) or (depname='research' and managerssn=ssn);
++-----------+
+| firstname |
++-----------+
+| Rupesh    |
+| Rimi      |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> select firstname from employ where salary>(select salary from department where depno=departmentnumber and managerssn=ssn);
+Empty set (0.00 sec)
+
+mysql> select firstname from employ where salary<(select salary from department where depno=departmentnumber and managerssn=ssn);
+Empty set (0.00 sec)
+
+mysql> select firstname from employ where salary<(select salary from employ,department where depno=departmentnumber and managerssn=ssn);
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql> select firstname from employ where salary>(select salary from employ,department where depno=departmentnumber and managerssn=ssn);
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql> select * from project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| life            |      4 | delhi        |     24 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select firstname from employ where salary<(select salary from department where depno=departmentnumber and managerssn=ssn);
+Empty set (0.00 sec)
+
+mysql> select firstname from employ where salary>(select salary from employ,department where depno=departmentnumber and managerssn=ssn);
+ERROR 1242 (21000): Subquery returns more than 1 row
+mysql> select E.firstname,dependentname from employ E where exists(select * from dependent where E.gender='female' and ssn=essn);
+ERROR 1054 (42S22): Unknown column 'dependentname' in 'field list'
+mysql> select E.firstname,dependentname from employ E,dependent where exists(select * from dependent where E.gender='female' and ssn=essn);
++-----------+---------------+
+| firstname | dependentname |
++-----------+---------------+
+| Rimi      | rimi          |
+| Shalini   | rimi          |
+| Rimi      | lalitha       |
+| Shalini   | lalitha       |
+| Rimi      | kate          |
+| Shalini   | kate          |
+| Rimi      | kunal         |
+| Shalini   | kunal         |
+| Rimi      | prerna        |
+| Shalini   | prerna        |
++-----------+---------------+
+10 rows in set (0.00 sec)
+
+mysql> select E.firstname,dependentname from employ E,dependent where ssn in (select essn  from dependent where E.gender='female' and ssn=essn);
++-----------+---------------+
+| firstname | dependentname |
++-----------+---------------+
+| Rimi      | rimi          |
+| Shalini   | rimi          |
+| Rimi      | lalitha       |
+| Shalini   | lalitha       |
+| Rimi      | kate          |
+| Shalini   | kate          |
+| Rimi      | kunal         |
+| Shalini   | kunal         |
+| Rimi      | prerna        |
+| Shalini   | prerna        |
++-----------+---------------+
+10 rows in set (0.00 sec)
+
+mysql> select E.firstname,dependentname from employ E,dependent where e.gender='female' and ssn in (select essn  from dependent  );
+ERROR 1054 (42S22): Unknown column 'e.gender' in 'where clause'
+mysql> select E.firstname,dependentname from employ E,dependent where E.gender='female' and ssn in (select essn  from dependent  );
++-----------+---------------+
+| firstname | dependentname |
++-----------+---------------+
+| Rimi      | rimi          |
+| Shalini   | rimi          |
+| Rimi      | lalitha       |
+| Shalini   | lalitha       |
+| Rimi      | kate          |
+| Shalini   | kate          |
+| Rimi      | kunal         |
+| Shalini   | kunal         |
+| Rimi      | prerna        |
+| Shalini   | prerna        |
++-----------+---------------+
+10 rows in set (0.01 sec)
+
+mysql> 
+mysql> ;
+ERROR: 
+No query specified
+
+mysql> 
+mysql> select W.EssN FROM WORKS_ON W WHERE EXISTS(SELECT B.Essn FROM WORKS_ON A,WORKS_ON B WHERE A.Essn=12 AND A.HOURS=B.HOURS );
++------+
+| EssN |
++------+
+|   12 |
+|   15 |
+|    7 |
+|    5 |
++------+
+4 rows in set (0.00 sec)
+
+mysql> select W.EssN FROM WORKS_ON W WHERE EXISTS(SELECT B.Essn FROM WORKS_ON A,WORKS_ON B WHERE A.Essn=12 AND A.HOURS=B.HOURS and B.Essn=W.Essn );
++------+
+| EssN |
++------+
+|   12 |
+|    7 |
++------+
+2 rows in set (0.00 sec)
+
+mysql> select firstname,lastname from employ where not exists((SELECT PROJNO FROM DEPARTMENT WHERE DEPNO=5 ) EXCEPT (SELECT PRONO FROM project where Essn=ssn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'EXCEPT (SELECT PRONO FROM project where Essn=ssn)' at line 1
+mysql> select firstname,lastname from employ where not exists((SELECT PROJNO FROM DEPARTMENT WHERE DEPNO=5 ) EXCEPT (SELECT PRONO FROM project where Essn=ssn);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'EXCEPT (SELECT PRONO FROM project where Essn=ssn)' at line 1
+mysql> select firstname from employ where not exists (select * from WORKS_ON B WHERE B.PRONO IN (SELECT PROJNO WHERE DEPNO=20)AND WORKS_ON A WHERE A.ESSN=SSN AND A.PRONO=B.PRONO);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'A WHERE A.ESSN=SSN AND A.PRONO=B.PRONO)' at line 1
+mysql> select firstname from employ where not exists (select * from WORKS_ON B WHERE B.PRONO IN (SELECT PROJNO WHERE DEPNO=20)AND SELECT *FROM WORKS_ON A WHERE A.ESSN=SSN AND A.PRONO=B.PRONO);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT *FROM WORKS_ON A WHERE A.ESSN=SSN AND A.PRONO=B.PRONO)' at line 1
+mysql> SELECT DEPNAME ,COUNT(SSN) FROM department,employ where depno=departmentnumber and gender ='male' and departmentnumber in (select A.departmentnumber from employ A group by departmentnumber having avg(salary)>30000);
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.department.DEPNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT DEPNAME ,COUNT(SSN) FROM department,employ where depno=departmentnumber and gender ='male' and departmentnumber in (select A.departmentnumber from employ A group by A.departmentnumber having avg(salary)>30000) ;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'company.department.DEPNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT DEPNAME ,COUNT(SSN) FROM department,employ where depno=departmentnumber and gender ='male' and departmentnumber in (select A.departmentnumber from employ A group by A.departmentnumber having avg(salary)>30000) GROUP BY DEPARTMENTNUMBER;
++----------+------------+
+| DEPNAME  | COUNT(SSN) |
++----------+------------+
+| Science  |          1 |
+| Design   |          1 |
+| Research |          1 |
++----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT *FROM employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT DEPNAME ,COUNT(SSN),ssn FROM department,employ where depno=departmentnumber and gender ='male' and departmentnumber in (select A.departmentnumber from employ A group by A.departmentnumber having avg(salary)>30000) GROUP BY DEPARTMENTNUMBER;
+ERROR 1055 (42000): Expression #3 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.employ.SSN' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT DEPNAME ,COUNT(SSN),ssn FROM department,employ where depno=departmentnumber and gender ='male' and departmentnumber in (select A.departmentnumber from employ A group by A.departmentnumber having avg(salary)>30000) GROUP BY DEPARTMENTNUMBER;
+ERROR 1055 (42000): Expression #3 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'company.employ.SSN' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> 3
+    -> 3
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '3
+3' at line 1
+mysql> untee example2.txt
+    -> t;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'untee example2.txt
+t' at line 1
+mysql> tee example2.txt
+mysql> select E.firstname from employ E where E.departmentnumber in (select A.departmentnumber from A.employ where A.salary>all (select B.salary from employ B );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1

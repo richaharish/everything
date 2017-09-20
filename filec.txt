@@ -1,0 +1,5 @@
+math 12 3coe
+algorithm 44 2mpd
+HCI 11 3coe
+science 3 2mpd
+datastruc 132 3ced

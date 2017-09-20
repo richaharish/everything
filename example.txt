@@ -1,0 +1,982 @@
+mysql>  select E.LASTNAME,S.LASTNAME FROM employ AS E,employ AS S WHERE E.SUPER_SSN=S.SSN;
++----------+----------+
+| LASTNAME | LASTNAME |
++----------+----------+
+| Bhat     | Nagi     |
+| Smith    | Patel    |
++----------+----------+
+2 rows in set (0.00 sec)
+
+mysql>  select E.LASTNAME,S.LASTNAME FROM employ  E,employ  S WHERE E.SUPER_SSN=S.SSN;
++----------+----------+
+| LASTNAME | LASTNAME |
++----------+----------+
+| Bhat     | Nagi     |
+| Smith    | Patel    |
++----------+----------+
+2 rows in set (0.01 sec)
+
+mysql> 
+mysql> select ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> select SSN
+    -> FROM EMPLOY;
+ERROR 1146 (42S02): Table 'company.EMPLOY' doesn't exist
+mysql> select SSN FROM employ;
++-----+
+| SSN |
++-----+
+|   5 |
+|  15 |
+|  21 |
+|   7 |
+|  12 |
++-----+
+5 rows in set (0.00 sec)
+
+mysql> select ssn,depname
+    -> from employ,department;
++-----+-----------+
+| ssn | depname   |
++-----+-----------+
+|   5 | Math      |
+|  15 | Math      |
+|  21 | Math      |
+|   7 | Math      |
+|  12 | Math      |
+|   5 | Computers |
+|  15 | Computers |
+|  21 | Computers |
+|   7 | Computers |
+|  12 | Computers |
+|   5 | Astronomy |
+|  15 | Astronomy |
+|  21 | Astronomy |
+|   7 | Astronomy |
+|  12 | Astronomy |
+|   5 | Science   |
+|  15 | Science   |
+|  21 | Science   |
+|   7 | Science   |
+|  12 | Science   |
+|   5 | Design    |
+|  15 | Design    |
+|  21 | Design    |
+|   7 | Design    |
+|  12 | Design    |
+|   5 | Research  |
+|  15 | Research  |
+|  21 | Research  |
+|   7 | Research  |
+|  12 | Research  |
++-----+-----------+
+30 rows in set (0.31 sec)
+
+mysql> select salary
+    -> from employ;
++--------+
+| salary |
++--------+
+|  59000 |
+|   7605 |
+|  42250 |
+|  99710 |
+|  76050 |
++--------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct salary
+    -> from employ;
++--------+
+| salary |
++--------+
+|  59000 |
+|   7605 |
+|  42250 |
+|  99710 |
+|  76050 |
++--------+
+5 rows in set (0.00 sec)
+
+mysql> select PROJNO
+    -> from project,department
+    -> ;
++--------+
+| PROJNO |
++--------+
+|      3 |
+|      7 |
+|      1 |
+|      5 |
+|      2 |
+|      4 |
+|      3 |
+|      7 |
+|      1 |
+|      5 |
+|      2 |
+|      4 |
+|      3 |
+|      7 |
+|      1 |
+|      5 |
+|      2 |
+|      4 |
+|      3 |
+|      7 |
+|      1 |
+|      5 |
+|      2 |
+|      4 |
+|      3 |
+|      7 |
+|      1 |
+|      5 |
+|      2 |
+|      4 |
+|      3 |
+|      7 |
+|      1 |
+|      5 |
+|      2 |
+|      4 |
++--------+
+36 rows in set (0.00 sec)
+
+mysql> select PROJNO from project,department,employ;
++--------+
+| PROJNO |
++--------+
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      3 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      7 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      1 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      5 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      2 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
+|      4 |
++--------+
+180 rows in set (0.00 sec)
+
+mysql> select PROJNO from project P,department D,employ E where E.LASTNAME='negi' and E.SSN=D.MANAGER_SSN aND D.DEPNO=P.DEPNUM ;
+ERROR 1054 (42S22): Unknown column 'D.MANAGER_SSN' in 'where clause'
+mysql> select PROJNO from project P,department D,employ E where E.LASTNAME='negi' and E.SSN=D.MANAGERSSN aND D.DEPNO=P.DEPNUM ;
++--------+
+| PROJNO |
++--------+
+|      5 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select PROJNO from project P,department D,employ E where E.LASTNAME='nagi' and E.SSN=D.MANAGERSSN aND D.DEPNO=P.DEPNUM ;
++--------+
+| PROJNO |
++--------+
+|      4 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> selct E.FIRSTNAME,E.LASTNAME
+    -> FROM employ
+    -> where ADDRESS LIKE%DELHI%;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct E.FIRSTNAME,E.LASTNAME
+FROM employ
+where ADDRESS LIKE%DELHI%' at line 1
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ where ADDRESS LIKE %DELHI%;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%DELHI%' at line 1
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ where ADDRESS LIKE %delhi%;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '%delhi%' at line 1
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ where ADDRESS LIKE '%delhi%';
+ERROR 1054 (42S22): Unknown column 'E.FIRSTNAME' in 'field list'
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%delhi%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT*FROM employ
+    -> ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%d%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%m%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rupesh    | Bhat     |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE 'm%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rupesh    | Bhat     |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE 'm';
+Empty set (0.01 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%m';
+Empty set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%i';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rupesh    | Bhat     |
+| John      | Smith    |
++-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%i%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rupesh    | Bhat     |
+| John      | Smith    |
+| Rimi      | Nagi     |
++-----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%i';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rupesh    | Bhat     |
+| John      | Smith    |
++-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE 'i%';
+Empty set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE 'd%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where ADDRESS LIKE '%d';
+Empty set (0.00 sec)
+
+mysql> select E.salary
+    -> from project P,employ E
+    -> where ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> select E.lastname,1.1* E.salary from project P,employ E where P.projname='producty' and P.depnum=E.departmentnumber;
++----------+---------------+
+| lastname | 1.1* E.salary |
++----------+---------------+
+| Negi     |       64900.0 |
++----------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select E.lastname,1.1* E.salary AS increasedsalary from project P,employ E where P.projname='producty' and P.depnum=E.departmentnumber;
++----------+-----------------+
+| lastname | increasedsalary |
++----------+-----------------+
+| Negi     |         64900.0 |
++----------+-----------------+
+1 row in set (0.00 sec)
+
+mysql> select E.lastname,1.1* E.salary AS increasedsalary from project P,employ E,WORKS_ON W where P.projname='producty' and P.PROJNO=W.PRONO AND W.Essn=E.SSN;
++----------+-----------------+
+| lastname | increasedsalary |
++----------+-----------------+
+| Negi     |         64900.0 |
++----------+-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT E.FIRSTNAME, E.LASTNAME
+    -> FROM employ
+    -> where ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> SELECT E.FIRSTNAME, E.LASTNAME FROM employ E where E.depatrmentnumber=24 and (E.salary bETWEEN 30000 and 40000) ;
+ERROR 1054 (42S22): Unknown column 'E.depatrmentnumber' in 'where clause'
+mysql> SELECT E.FIRSTNAME, E.LASTNAME FROM employ E where E.departmentnumber=24 and (E.salary bETWEEN 30000 and 40000) ;
+Empty set (0.35 sec)
+
+mysql> SELECT E.FIRSTNAME, E.LASTNAME FROM employ E where E.departmentnumber=24 and (E.salary bETWEEN 30000 and 67000) ;
+Empty set (0.00 sec)
+
+mysql> SELECT E.FIRSTNAME, E.LASTNAME FROM employ E where E.departmentnumber=24 and (E.salary BETWEEN 30000 and 67000) ;
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME, LASTNAME FROM employ  where departmentnumber=24 and (salary bETWEEN 30000 and 67000) ;
+Empty set (0.00 sec)
+
+mysql> select *from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT FIRSTNAME, LASTNAME FROM employ  where departmentnumber=24 and (salary bETWEEN 30000 and 117000) ;
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Rimi      | Nagi     |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME, LASTNAME FROM employ  where departmentnumber=24 and (salary bETWEEN 30 and 117000) ;
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Rupesh    | Bhat     |
+| Rimi      | Nagi     |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> 
+mysql> ;
+ERROR: 
+No query specified
+
+mysql> select lastname,firstname
+    -> from WORKS_ON,employ,project
+    -> ;
++----------+-----------+
+| lastname | firstname |
++----------+-----------+
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Negi     | Nikhil    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Bhat     | Rupesh    |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Smith    | John      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
+| Patel    | Shalini   |
++----------+-----------+
+120 rows in set (0.00 sec)
+
+mysql> select E.lastname,E.firstname,P.projname from WORKS_ON W,employ E,projectP where W.prono=P.projno and W.Essn=E.SSN  ORdER BY E.department,E.lastname,E.firstname ;
+ERROR 1146 (42S02): Table 'company.projectP' doesn't exist
+mysql> select E.lastname,E.firstname,P.projname from WORKS_ON W,employ E,project P where W.prono=P.projno and W.Essn=E.SSN  ORdER BY E.department,E.lastname,E.firstname ;
+ERROR 1054 (42S22): Unknown column 'E.department' in 'order clause'
+mysql> select E.lastname,E.firstname,P.projname from WORKS_ON W,employ E,project P where W.prono=P.projno and W.Essn=E.SSN  ORdER BY E.departmentnumber,E.lastname,E.firstname ;
++----------+-----------+----------+
+| lastname | firstname | projname |
++----------+-----------+----------+
+| Negi     | Nikhil    | producty |
+| Smith    | John      | innovate |
+| Bhat     | Rupesh    | life     |
+| Nagi     | Rimi      | innovate |
++----------+-----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select *from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select *FROM WORKS_ON;
++------+-------+-------+
+| Essn | HOURS | PRONO |
++------+-------+-------+
+|    5 |    15 |     5 |
+|    7 |    30 |     4 |
+|   12 |    30 |     2 |
+|   15 |    12 |     2 |
++------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select *FROM project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| life            |      4 | delhi        |     24 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select E.lastname,E.firstname,P.projname from WORKS_ON W,employ E,department D,project P where W.prono=P.projno and W.Essn=E.SSN  ORdER BY D.depname,E.lastname,E.firstname ;
++----------+-----------+----------+
+| lastname | firstname | projname |
++----------+-----------+----------+
+| Bhat     | Rupesh    | life     |
+| Nagi     | Rimi      | innovate |
+| Negi     | Nikhil    | producty |
+| Smith    | John      | innovate |
+| Bhat     | Rupesh    | life     |
+| Nagi     | Rimi      | innovate |
+| Negi     | Nikhil    | producty |
+| Smith    | John      | innovate |
+| Bhat     | Rupesh    | life     |
+| Nagi     | Rimi      | innovate |
+| Negi     | Nikhil    | producty |
+| Smith    | John      | innovate |
+| Bhat     | Rupesh    | life     |
+| Nagi     | Rimi      | innovate |
+| Negi     | Nikhil    | producty |
+| Smith    | John      | innovate |
+| Bhat     | Rupesh    | life     |
+| Nagi     | Rimi      | innovate |
+| Negi     | Nikhil    | producty |
+| Smith    | John      | innovate |
+| Bhat     | Rupesh    | life     |
+| Nagi     | Rimi      | innovate |
+| Negi     | Nikhil    | producty |
+| Smith    | John      | innovate |
++----------+-----------+----------+
+24 rows in set (0.00 sec)
+
+mysql> select E.lastname,E.firstname,P.projname from WORKS_ON W,employ E,department D,project P where W.prono=P.projno and W.Essn=E.SSN and D.depno=P.depnum  ORdER BY D.depname,E.lastname,E.firstname ;
++----------+-----------+----------+
+| lastname | firstname | projname |
++----------+-----------+----------+
+| Nagi     | Rimi      | innovate |
+| Smith    | John      | innovate |
+| Bhat     | Rupesh    | life     |
+| Negi     | Nikhil    | producty |
++----------+-----------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME
+    -> FROM employ E
+    -> where SUPERSSN=NULL;
+ERROR 1054 (42S22): Unknown column 'SUPERSSN' in 'where clause'
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPERSSN=NULL;
+ERROR 1054 (42S22): Unknown column 'E.SUPERSSN' in 'where clause'
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPER_SSN=NULL;
+Empty set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPER_SSN IS NULL;
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rimi      | Nagi     |
+| Shalini   | Patel    |
++-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPER_SSN=' NULL';
+Empty set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPER_SSN not NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NULL' at line 1
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPER_SSN NOT NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NULL' at line 1
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPER_SSN IS NULL;
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rimi      | Nagi     |
+| Shalini   | Patel    |
++-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select E.FIRSTNAME,E.LASTNAME FROM employ E where E.SUPER_SSN IS NOT NULL;
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Rupesh    | Bhat     |
+| John      | Smith    |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT *FROM WORKS_ON;
++------+-------+-------+
+| Essn | HOURS | PRONO |
++------+-------+-------+
+|    5 |    15 |     5 |
+|    7 |    30 |     4 |
+|   12 |    30 |     2 |
+|   15 |    12 |     2 |
++------+-------+-------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT W.Essn
+    -> FROM WORKS_ON
+    -> WHERE (HOURS) IN (SELECT W.HOURS FROM WORKS_ON WHERE Essn=12);
+ERROR 1054 (42S22): Unknown column 'W.Essn' in 'field list'
+mysql> SELECT Essn FROM WORKS_ON WHERE (HOURS) IN (SELECT HOURS FROM WORKS_ON WHERE Essn=12);
++------+
+| Essn |
++------+
+|    7 |
+|   12 |
++------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Essn FROM WORKS_ON WHERE (HOURS) IN (SELECT HOURS FROM WORKS_ON WHERE Essn=12);
++------+
+| Essn |
++------+
+|    7 |
+|   12 |
++------+
+2 rows in set (0.00 sec)
+
+mysql> select lastname,firstname from employ where (salary)>all (select salary from employ where departmentnumber=14);
++----------+-----------+
+| lastname | firstname |
++----------+-----------+
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
++----------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> select* from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select E.lastname,E.firstname
+    -> from employ
+    -> where (gender) in (select gender from dependent where E.SSN=ESSN);
+ERROR 1054 (42S22): Unknown column 'E.lastname' in 'field list'
+mysql> select E.lastname,E.firstname from employ E where (gender) in (select gender from dependent where E.SSN=ESSN);
++----------+-----------+
+| lastname | firstname |
++----------+-----------+
+| Patel    | Shalini   |
++----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select E.lastname,E.firstname from employ E where (gender)IS NOT in (select gender from dependent where E.SSN=ESSN);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in (select gender from dependent where E.SSN=ESSN)' at line 1
+mysql> select E.lastname,E.firstname from employ E where (gender)<> in (select gender from dependent where E.SSN=ESSN);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in (select gender from dependent where E.SSN=ESSN)' at line 1
+mysql> select E.lastname,E.firstname from employ E where (E.SSN) in (select D.ESSN  from dependent D where E.GENDER=D.GENDER);
++----------+-----------+
+| lastname | firstname |
++----------+-----------+
+| Patel    | Shalini   |
++----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> DESC employ;
++------------------+----------+------+-----+---------+-------+
+| Field            | Type     | Null | Key | Default | Extra |
++------------------+----------+------+-----+---------+-------+
+| FIRSTNAME        | char(10) | YES  |     | NULL    |       |
+| MIDDLENAME       | char(10) | YES  |     | NULL    |       |
+| LASTNAME         | char(10) | YES  |     | NULL    |       |
+| SSN              | int(11)  | NO   | PRI | NULL    |       |
+| BIRTHDATE        | char(10) | YES  |     | NULL    |       |
+| ADDRESS          | char(20) | YES  |     | NULL    |       |
+| GENDER           | char(6)  | YES  |     | NULL    |       |
+| SALARY           | int(11)  | YES  |     | NULL    |       |
+| SUPER_SSN        | int(11)  | YES  | MUL | NULL    |       |
+| DEPARTMENTNUMBER | int(11)  | YES  | MUL | NULL    |       |
+| MOBILE_NO        | int(11)  | YES  |     | NULL    |       |
++------------------+----------+------+-----+---------+-------+
+11 rows in set (0.00 sec)
+
+mysql> asc employ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc employ' at line 1
+mysql> ASC employ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ASC employ' at line 1
+mysql> select E.LASTNAME,E.FIRSTNAME
+    -> FROM employ
+    -> where exists(select *
+    -> from dependent D where E.SSN=D.ESSN);
+ERROR 1054 (42S22): Unknown column 'E.LASTNAME' in 'field list'
+mysql> select E.LASTNAME,E.FIRSTNAME FROM employ E where exists(select * from dependent D where E.SSN=D.ESSN);
++----------+-----------+
+| LASTNAME | FIRSTNAME |
++----------+-----------+
+| Negi     | Nikhil    |
+| Bhat     | Rupesh    |
+| Smith    | John      |
+| Nagi     | Rimi      |
+| Patel    | Shalini   |
++----------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select E.LASTNAME,E.FIRSTNAME FROM employ E where NOT exists(select * from dependent D where E.SSN=D.ESSN);
+Empty set (0.00 sec)
+
+mysql> SELECT E.LASTNAME FROM EMPLOY E ,DEPARTMENT D WHERE E.SUPER_SSN=D.MANAGERSSN AND EXISTS(SELECT * FROM dependent where E.SSN=Essn);
+ERROR 1146 (42S02): Table 'company.EMPLOY' doesn't exist
+mysql> SELECT E.LASTNAME FROM employ E ,DEPARTMENT D WHERE E.SUPER_SSN=D.MANAGERSSN AND EXISTS(SELECT * FROM dependent where E.SSN=Essn);
+ERROR 1146 (42S02): Table 'company.DEPARTMENT' doesn't exist
+mysql> SELECT E.LASTNAME FROM employ E ,department D WHERE E.SUPER_SSN=D.MANAGERSSN AND EXISTS(SELECT * FROM dependent where E.SSN=Essn);
++----------+
+| LASTNAME |
++----------+
+| Bhat     |
+| Smith    |
++----------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT E.LASTNAME FROM employ E ,department D WHERE E.SUPER_SSN=D.MANAGERSSN AND EXISTS(SELECT * FROM dependent where E.SSN=Essn);
++----------+
+| LASTNAME |
++----------+
+| Bhat     |
+| Smith    |
++----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT E.LASTNAME FROM employ E ,department D WHERE E.SUPER_SSN=D.MANAGERSSN AND EXISTS(SELECT * FROM dependent where Essn=D.MANAGERSSN);
++----------+
+| LASTNAME |
++----------+
+| Bhat     |
+| Smith    |
++----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT E.LASTNAME FROM employ E ,department D WHERE E.SSN=D.MANAGERSSN AND EXISTS(SELECT * FROM dependent where Essn=D.MANAGERSSN);
++----------+
+| LASTNAME |
++----------+
+| Negi     |
+| Bhat     |
+| Smith    |
+| Nagi     |
+| Patel    |
++----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT E.LASTNAME FROM employ E ,department D WHERE  EXISTS(SELECT * FROM dependent where Essn=D.MANAGERSSN AND D.MANAGERSSN=E.SSN);
++----------+
+| LASTNAME |
++----------+
+| Negi     |
+| Bhat     |
+| Smith    |
+| Nagi     |
+| Patel    |
++----------+
+5 rows in set (0.00 sec)
+

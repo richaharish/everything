@@ -1,0 +1,2 @@
+mysql> Terminal close -- exit!
+Aborted

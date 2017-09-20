@@ -1,0 +1,101 @@
+ Scaled voltage: 0.700000
+
+
+TCAM delay in various components:
+---------------------------------------
+TCAM subbanks routing delay : 86059.728346 (ns) 
+TCAM intra-subbanks routing delay : 0.000000 (ns) 
+Precharge circuit delay : 24.682151 (ns) 
+TCAM matchline delay (precharge) : 122383.353300 (ns) 
+TCAM searchline delay (search data) : 25.889316 (ns) 
+TCAM matchline delay (discharge) : 122397.847008 (ns) 
+Priority encoder delay  : 0.091750 (ns) 
+TCAM searchline delay (discharging) : 0.003796 (ns) 
+TCAM total delay : 330891.518388 (ns) 
+TCAM access time : 330891.518388 (ns) 
+
+Matchline capacitance components : 
+------------------------- 		   
+C_wire_per_cell ( in fF ) : 6.172222 		   
+C_drain_compareT ( in fF ) : 2.373248 		   
+C_precharge ( in fF ) : 10.196000 		   
+C_nand_inv_gate ( in fF ) : 175.600006
+
+Searchline capacitance components : 
+------------------------- 		   
+C_wire_per_cell ( in fF ) : 5.830000 		   
+C_gate_compareT ( in fF ) : 0.771200 		   
+C_driver ( in fF ) : 119.669998
+decoder power: 0.000000
+decoder power: 0.000003
+
+Matchline capacitance components : 
+------------------------- 		   
+C_wire_per_cell ( in fF ) : 6.172222 		   
+C_drain_compareT ( in fF ) : 2.373248 		   
+C_precharge ( in fF ) : 10.196000 		   
+C_nand_inv_gate ( in fF ) : 175.600006
+
+Searchline capacitance components : 
+------------------------- 		   
+C_wire_per_cell ( in fF ) : 5.830000 		   
+C_gate_compareT ( in fF ) : 0.771200 		   
+C_driver ( in fF ) : 119.669998
+
+
+      TCAM Configuration and Power Statistics 
+------------------------------------------------ 
+TCAM number of rows: 1
+TCAM number of bits: 1024000
+CMOS technology used: 0.045000
+Number of subbanks: 4
+Number of row divisions (Nrd): 1
+
+
+   TCAM Seach time 
+-------------------------------------------------- 
+TCAM routing delay : 86059.728346 (ns) 
+TCAM total delay : 330891.518388 (ns) 
+Priority encoder delay : 0.091750 (ns) 
+TCAM access time : 330891.518388 (ns) 
+
+
+   TCAM Leakage power (Sub-threshold leakage power)  
+-------------------------------------------------- 
+TCAM Cell leakage power (mW): 0.000000 
+TCAM Cell access trasistor leakage power (mW): 0.000000 
+Deocder leakage power (mW): 0.000000 
+Matchline precharge circuit leakage power (mW): 0.000000 
+Searchline driver leakage power (mW): 0.000000 
+Wordline driver leakage power (mW): 0.000000 
+Total leakage power (mW) : 0.000000
+
+
+    1. TCAM write operation (Dynamic power) 
+------------------------------------------------ 
+routing power (nJ): 52.263623
+decoder power (nJ): 0.000003
+wordline power (nJ): 0.549150
+bitline power (nJ): 4.082771
+Total read power (nJ): 56.895548
+
+
+    2. TCAM read operation (Dynamic Power) 
+------------------------------------------------ 
+routing power (nJ): 52.263623
+decoder power (nJ): 0.000003
+wordline power (nJ): 0.549150
+bitline power (nJ): 4.881652
+sense amplifier paper (nJ): 3.053096
+Total read power (nJ): 60.747524
+
+
+    3. TCAM search operation (Dynamic power) 
+------------------------------------------------ 
+Routing power (nJ): 52.263623
+Intra-subbank Routing power (nJ): 0.000000
+Match line power (nJ): 0.000000
+Search line power (nJ): 13.510264
+Priority encoder power (nJ) : 0.000375
+Total TCAM power (nJ) : 65.774266
+

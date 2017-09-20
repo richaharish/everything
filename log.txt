@@ -1,0 +1,4 @@
+ DNS Dossier listening on port 1400
+ DNS Dossier listening on port 1400 Socket creation successful
+ DNS Dossier listening on port 1400 Socket creation successful Bind successful
+ DNS Dossier listening on port 1400 Socket creation successful Bind successful Incorrect request passed by client 172.17.12.164

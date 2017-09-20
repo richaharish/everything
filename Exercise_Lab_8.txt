@@ -1,0 +1,1526 @@
+mysql> 
+mysql> # Select Database to use
+mysql> # 28 Feb 2017
+mysql> USE Company1;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> 
+mysql> # 1. Display all odd numbered alternate records from ‘Employee’ table.
+
+mysql> # Declare and initiate a vaiable
+mysql> SET @rn=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> # Use that variable as read counter
+mysql> SELECT E.*
+    -> FROM (SELECT
+    ->         t.*,
+    ->         (@rn := @rn + 1) AS seqnum
+    ->       FROM Employee t) E
+    -> WHERE MOD(seqnum, 2) = 1;
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+--------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  | seqnum |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+--------+
+| JOHN     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |      1 |
+| JOYCE    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX   | F    |  25000 | 333445555 |    5 |      3 |
+| JAMES    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX   | M    |  55000 |      NULL |    1 |      5 |
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX  | F    |  43000 | 888665555 |    4 |      7 |
+| ALICIA   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX  | F    |  25000 | 943775543 |    4 |      9 |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 2. Display all even numbered alternate records from ‘Employee’ table.
+
+mysql> # Declare and initiate a vaiable
+mysql> SET @rn=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> # Use that variable as read counter
+mysql> SELECT E.*
+    -> FROM (SELECT
+    ->         t.*,
+    ->         (@rn := @rn + 1) AS seqnum
+    ->       FROM Employee t) E
+    -> WHERE MOD(seqnum, 2) = 0;
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+--------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                         | Sex  | Salary | Super_ssn | Dno  | seqnum |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+--------+
+| FRANKLIN | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX           | M    |  40000 | 888665555 |    5 |      2 |
+| RAMESH   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX        | M    |  38000 | 333445555 |    5 |      4 |
+| ROBERT   | F     | Scott   | 943775543 | 1972-06-21 | 2365 Newcastle Rd, Bellaire, TX | M    |  58000 | 888665555 |    1 |      6 |
+| AHMAD    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX         | M    |  25000 | 987654321 |    4 |      8 |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 3. Find the year from the given date.
+mysql> SELECT
+    ->   Fname,
+    ->   Minit,
+    ->   Lname,
+    ->   year(Bdate) AS BirthYear
+    -> FROM Employee
+    -> ORDER BY BirthYear;
++----------+-------+---------+-----------+
+| Fname    | Minit | Lname   | BirthYear |
++----------+-------+---------+-----------+
+| JAMES    | E     | Borg    |      1937 |
+| JENNIFER | S     | Wallace |      1941 |
+| FRANKLIN | T     | Wong    |      1955 |
+| RAMESH   | K     | Narayan |      1962 |
+| JOHN     | B     | Smith   |      1965 |
+| ALICIA   | J     | Zelaya  |      1968 |
+| AHMAD    | V     | Jabbar  |      1969 |
+| JOYCE    | A     | English |      1972 |
+| ROBERT   | F     | Scott   |      1972 |
++----------+-------+---------+-----------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 4. Find year from birth date when the date is a VARCHAR column instead of the proper
+mysql> # DATE data type.
+mysql> SELECT LEFT(Bdate, 4)
+    -> FROM Employee;
++----------------+
+| LEFT(Bdate, 4) |
++----------------+
+| 1965           |
+| 1955           |
+| 1972           |
+| 1962           |
+| 1937           |
+| 1972           |
+| 1941           |
+| 1969           |
+| 1968           |
++----------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 5. Select first 3 characters of first name.
+mysql> SELECT LEFT(Fname, 3)
+    -> FROM Employee;
++----------------+
+| LEFT(Fname, 3) |
++----------------+
+| JOH            |
+| FRA            |
+| JOY            |
+| RAM            |
+| JAM            |
+| ROB            |
+| JEN            |
+| AHM            |
+| ALI            |
++----------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 6. Check whether date passed to Query is the date of a given format or not.
+mysql> # Use of Nested IF
+mysql> SELECT
+    ->   Bdate,
+    ->   IF(DATE_FORMAT(Bdate, '%y-%m-%d'),
+    ->      'IS OF FORMAT YYYY-MM-DD', IF(DATE_FORMAT(Bdate, '%m-%d-%y'),
+    ->                                    'IS OF FORMAT MM-DD-YYYY', IF(DATE_FORMAT(Bdate, '%d-%m-%y'),'IS OF FORMAT DD-MM-YYYY', 'NOT A DATE FORMAT'))) AS DATE_CHECK
+    -> FROM Employee;
++------------+-------------------------+
+| Bdate      | DATE_CHECK              |
++------------+-------------------------+
+| 1965-01-09 | IS OF FORMAT YYYY-MM-DD |
+| 1955-12-08 | IS OF FORMAT YYYY-MM-DD |
+| 1972-07-31 | IS OF FORMAT YYYY-MM-DD |
+| 1962-09-15 | IS OF FORMAT YYYY-MM-DD |
+| 1937-11-10 | IS OF FORMAT YYYY-MM-DD |
+| 1972-06-21 | IS OF FORMAT YYYY-MM-DD |
+| 1941-06-21 | IS OF FORMAT YYYY-MM-DD |
+| 1969-03-29 | IS OF FORMAT YYYY-MM-DD |
+| 1968-01-19 | IS OF FORMAT YYYY-MM-DD |
++------------+-------------------------+
+9 rows in set (0.00 sec)
+
+mysql> # 7. Find duplicate rows in a table of your choice.
+mysql> # Creating Temporary Table for this query
+mysql> CREATE TABLE COPYEMP (
+    ->   Fname     VARCHAR(20),
+    ->   Minit     CHAR,
+    ->   Lname     VARCHAR(20),
+    ->   Ssn       INTEGER,
+    ->   Bdate     DATE,
+    ->   Address   VARCHAR(40),
+    ->   Sex       CHAR,
+    ->   Salary    INTEGER,
+    ->   Super_ssn INTEGER,
+    ->   Dno       INTEGER
+    -> );
+Query OK, 0 rows affected (0.37 sec)
+
+mysql> # Inserting Duplicate Records
+mysql> INSERT INTO
+    -> COPYEMP VALUES
+    ->   ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+    ->   ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+    ->   ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+    ->   ('Joyce','A','English',453453453,'1972-07-31','5631 Rice, Houston, TX','F',25000,333445555,5),
+    ->   ('Ramesh','K','Narayan',666884444,'1962-09-15','975 Fire Oak, Humble, TX','M',38000,333445555,5),
+    ->   ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+    ->   ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+    ->   ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+    ->   ('Ahmad','V','Jabbar',987987987,'1969-03-29','980 Dallas, Houston, TX','M',25000,987654321,4),
+    ->   ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+    ->   ('Alicia','J','Zelaya',999887777,'1968-01-19','3321 Castle, Spring, TX','F',25000,987654321,4);
+Query OK, 11 rows affected (0.11 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+mysql> # Group by all fields so that we can see if entire record is duplicated
+mysql> SELECT *,COUNT(*) AS "Number of Copies"
+    -> FROM COPYEMP
+    -> GROUP BY Ssn, Fname, Minit, Lname, Bdate, Address, Sex, Salary, Super_ssn, Dno
+    -> HAVING COUNT(*) > 1;
++----------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+------------------+
+| Fname    | Minit | Lname | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  | Number of Copies |
++----------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+------------------+
+| John     | B     | Smith | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |                2 |
+| Franklin | T     | Wong  | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |                3 |
+| James    | E     | Borg  | 888665555 | 1937-11-10 | 450 Stone, Houston, TX   | M    |  55000 |      NULL |    1 |                2 |
++----------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+------------------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 8. Delete the duplicate records retrieved using the above query without using a
+mysql> # temporary table.
+mysql> # Displaying the entire table before to check the query
+mysql> SELECT * FROM COPYEMP;
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX   | F    |  25000 | 333445555 |    5 |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX | M    |  38000 | 333445555 |    5 |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX   | M    |  55000 |      NULL |    1 |
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX   | M    |  55000 |      NULL |    1 |
+| Ahmad    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX  | M    |  25000 | 987654321 |    4 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |
+| Alicia   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX  | F    |  25000 | 987654321 |    4 |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+11 rows in set (0.00 sec)
+
+mysql> # Way 1 This won't allow duplicate entries to be entered
+mysql> # ALTER TABLE COPYEMP ADD UNIQUE INDEX (Fname,Minit,Lname,Ssn,Bdate,Address,Sex,Salary,Super_ssn,Dno);
+mysql> # Way 2 Based on a field or say if Primary Key is assigned
+mysql> # Deleting Duplicate Records
+mysql> DELETE FROM COPYEMP
+    -> WHERE Ssn IN (SELECT *
+    ->               FROM (SELECT Ssn
+    ->                     FROM COPYEMP
+    ->                     GROUP BY Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno
+    ->                     HAVING (COUNT(*) > 1)) AS A);
+Query OK, 7 rows affected (0.04 sec)
+
+mysql> # Again Displaying the entire table before to check the query
+mysql> SELECT * FROM COPYEMP;
++--------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname  | Minit | Lname   | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++--------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Joyce  | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX   | F    |  25000 | 333445555 |    5 |
+| Ramesh | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX | M    |  38000 | 333445555 |    5 |
+| Ahmad  | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX  | M    |  25000 | 987654321 |    4 |
+| Alicia | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX  | F    |  25000 | 987654321 |    4 |
++--------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+4 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 9. Delete the duplicate records retrieved using the above query using a temporary table.
+mysql> # Emptying the table
+mysql> DELETE FROM COPYEMP;
+Query OK, 4 rows affected (0.05 sec)
+
+mysql> # Inserting Duplicate entries
+mysql> INSERT INTO
+    -> COPYEMP VALUES
+    ->   ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+    ->   ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+    ->   ('Joyce','A','English',453453453,'1972-07-31','5631 Rice, Houston, TX','F',25000,333445555,5),
+    ->   ('Ramesh','K','Narayan',666884444,'1962-09-15','975 Fire Oak, Humble, TX','M',38000,333445555,5),
+    ->   ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+    ->   ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+    ->   ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+    ->   ('Ahmad','V','Jabbar',987987987,'1969-03-29','980 Dallas, Houston, TX','M',25000,987654321,4),
+    ->   ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+    ->   ('Alicia','J','Zelaya',999887777,'1968-01-19','3321 Castle, Spring, TX','F',25000,987654321,4);
+Query OK, 10 rows affected (0.04 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> # Displaying the entire table before to check the query
+mysql> SELECT * FROM COPYEMP;
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX   | F    |  25000 | 333445555 |    5 |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX | M    |  38000 | 333445555 |    5 |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX   | M    |  55000 |      NULL |    1 |
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX   | M    |  55000 |      NULL |    1 |
+| Ahmad    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX  | M    |  25000 | 987654321 |    4 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |
+| Alicia   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX  | F    |  25000 | 987654321 |    4 |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+10 rows in set (0.00 sec)
+
+mysql> # Creating Temporary Table from only the distinct records in the original table
+mysql> CREATE TABLE TTABLE AS SELECT DISTINCT *
+    ->                        FROM COPYEMP;
+Query OK, 7 rows affected (0.28 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> # Dropping Original Table
+mysql> DROP TABLE COPYEMP;
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> # Renaming Temporary Table with Original Table Name ( Replacing )
+mysql> RENAME TABLE
+    ->     TTABLE TO COPYEMP;
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> # Again Displaying the entire table before to check the query
+mysql> SELECT * FROM COPYEMP;
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX   | F    |  25000 | 333445555 |    5 |
+| Ramesh   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX | M    |  38000 | 333445555 |    5 |
+| James    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX   | M    |  55000 |      NULL |    1 |
+| Ahmad    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX  | M    |  25000 | 987654321 |    4 |
+| Alicia   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX  | F    |  25000 | 987654321 |    4 |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+7 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 10. Extract the 3 rd maximum salary. Also find n th max salary.
+mysql> # Without using LIMIT
+mysql> SELECT E.*
+    -> FROM Employee E
+    -> WHERE (SELECT COUNT(*)
+    ->        FROM Employee D
+    ->        WHERE D.Salary > E.Salary) = 2;
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX | F    |  43000 | 888665555 |    4 |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> # Using LIMIT
+mysql> SELECT *
+    -> FROM Employee
+    -> ORDER BY Salary DESC
+    -> LIMIT 2, 1;
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX | F    |  43000 | 888665555 |    4 |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> # If multiple people have 3rd max salary
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Salary = (SELECT Salary
+    ->                 FROM Employee
+    ->                 ORDER BY Salary DESC
+    ->                 LIMIT 2, 1);
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX | F    |  43000 | 888665555 |    4 |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 11. How to get first 3 max salaries. Also find first n max salaries.
+mysql> SELECT *
+    -> FROM Employee
+    -> ORDER BY Salary DESC
+    -> LIMIT 3;
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                         | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| ROBERT   | F     | Scott   | 943775543 | 1972-06-21 | 2365 Newcastle Rd, Bellaire, TX | M    |  58000 | 888665555 |    1 |
+| JAMES    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX          | M    |  55000 |      NULL |    1 |
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX         | F    |  43000 | 888665555 |    4 |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 12. Find the size of the SCHEMA/USER.
+mysql> # Fetching required data from Information_Schema
+mysql> SELECT
+    ->   table_schema                                  "Data Base Name",
+    ->   sum(data_length + index_length) / 1024 / 1024 "Data Base Size in MB"
+    -> FROM information_schema.TABLES
+    -> GROUP BY table_schema;
++-------------------------+----------------------+
+| Data Base Name          | Data Base Size in MB |
++-------------------------+----------------------+
+| Company                 |           0.20312500 |
+| Company1                |           0.18750000 |
+| information_schema      |           0.15625000 |
+| mysql                   |           2.16815948 |
+| performance_schema      |           0.00000000 |
+| Students                |           0.07812500 |
+| Suppliers_Parts_Project |           0.09375000 |
+| sys                     |           0.01562500 |
++-------------------------+----------------------+
+8 rows in set, 48 warnings (0.04 sec)
+
+mysql> 
+mysql> # 13. Display year, month, day as separate attributes from employee’s date of birth.
+
+mysql> # not.
+mysql> # Using YEAR,MONTH,DAY
+mysql> SELECT
+    ->   Bdate,
+    ->   YEAR(Bdate)  Year,
+    ->   MONTH(Bdate) Month,
+    ->   DAY(Bdate)   Day
+    -> FROM Employee;
++------------+------+-------+------+
+| Bdate      | Year | Month | Day  |
++------------+------+-------+------+
+| 1965-01-09 | 1965 |     1 |    9 |
+| 1955-12-08 | 1955 |    12 |    8 |
+| 1972-07-31 | 1972 |     7 |   31 |
+| 1962-09-15 | 1962 |     9 |   15 |
+| 1937-11-10 | 1937 |    11 |   10 |
+| 1972-06-21 | 1972 |     6 |   21 |
+| 1941-06-21 | 1941 |     6 |   21 |
+| 1969-03-29 | 1969 |     3 |   29 |
+| 1968-01-19 | 1968 |     1 |   19 |
++------------+------+-------+------+
+9 rows in set (0.00 sec)
+
+mysql> # Using EXTRACT
+mysql> SELECT
+    ->   Bdate,
+    ->   EXTRACT(YEAR_MONTH FROM Bdate),
+    ->   EXTRACT(DAY_MINUTE FROM Bdate),
+    ->   EXTRACT(YEAR FROM Bdate)  Year,
+    ->   EXTRACT(MONTH FROM Bdate) Month,
+    ->   EXTRACT(DAY FROM Bdate)   Day
+    -> FROM Employee;
++------------+--------------------------------+--------------------------------+------+-------+------+
+| Bdate      | EXTRACT(YEAR_MONTH FROM Bdate) | EXTRACT(DAY_MINUTE FROM Bdate) | Year | Month | Day  |
++------------+--------------------------------+--------------------------------+------+-------+------+
+| 1965-01-09 |                         196501 |                          90000 | 1965 |     1 |    9 |
+| 1955-12-08 |                         195512 |                          80000 | 1955 |    12 |    8 |
+| 1972-07-31 |                         197207 |                         310000 | 1972 |     7 |   31 |
+| 1962-09-15 |                         196209 |                         150000 | 1962 |     9 |   15 |
+| 1937-11-10 |                         193711 |                         100000 | 1937 |    11 |   10 |
+| 1972-06-21 |                         197206 |                         210000 | 1972 |     6 |   21 |
+| 1941-06-21 |                         194106 |                         210000 | 1941 |     6 |   21 |
+| 1969-03-29 |                         196903 |                         290000 | 1969 |     3 |   29 |
+| 1968-01-19 |                         196801 |                         190000 | 1968 |     1 |   19 |
++------------+--------------------------------+--------------------------------+------+-------+------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 14. Display the current time.
+mysql> # using the current_time Keyword
+mysql> SELECT CURRENT_TIME();
++----------------+
+| CURRENT_TIME() |
++----------------+
+| 07:22:06       |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> # Using SYSDATE
+mysql> SELECT TIME(SYSDATE());
++-----------------+
+| TIME(SYSDATE()) |
++-----------------+
+| 07:22:06        |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> # FROM Current time stamp
+mysql> SELECT TIME(CURRENT_TIMESTAMP);
++-------------------------+
+| TIME(CURRENT_TIMESTAMP) |
++-------------------------+
+| 07:22:06                |
++-------------------------+
+1 row in set (0.00 sec)
+
+mysql> # using system command gives entire date and time and AGGREGATION WITH TIME(system date) dowsn't work
+mysql> system date;
+mysql> 
+mysql> # Some more interesting keywords
+mysql> # Using TIME FORMAT to change 24 HR to 12 HR
+mysql> SELECT TIME_FORMAT(CURRENT_TIME(),'%r');
++----------------------------------+
+| TIME_FORMAT(CURRENT_TIME(),'%r') |
++----------------------------------+
+| 07:22:06 AM                      |
++----------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT TIME_FORMAT(CURRENT_TIME(),'%l:%i:%s %p');
++-------------------------------------------+
+| TIME_FORMAT(CURRENT_TIME(),'%l:%i:%s %p') |
++-------------------------------------------+
+| 7:22:06 AM                                |
++-------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 15. Retrieve the date part of the date or datetime expression.
+mysql> # FROM custom time stamp
+mysql> SELECT DATE('2008-09-22 15:24:13.970');
++---------------------------------+
+| DATE('2008-09-22 15:24:13.970') |
++---------------------------------+
+| 2008-09-22                      |
++---------------------------------+
+1 row in set (0.00 sec)
+
+mysql> # FROM Current time stamp
+mysql> SELECT DATE(CURRENT_TIMESTAMP);
++-------------------------+
+| DATE(CURRENT_TIMESTAMP) |
++-------------------------+
+| 2017-03-10              |
++-------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 16. Given a date, retrieve the next day’s date.
+
+mysql> # adding Interval of a day because just adding +1 to a date has limits at end of month date
+mysql> SELECT
+    ->   Bdate,
+    ->   (Bdate + INTERVAL 1 DAY) Next_Day
+    -> FROM Employee;
++------------+------------+
+| Bdate      | Next_Day   |
++------------+------------+
+| 1965-01-09 | 1965-01-10 |
+| 1955-12-08 | 1955-12-09 |
+| 1972-07-31 | 1972-08-01 |
+| 1962-09-15 | 1962-09-16 |
+| 1937-11-10 | 1937-11-11 |
+| 1972-06-21 | 1972-06-22 |
+| 1941-06-21 | 1941-06-22 |
+| 1969-03-29 | 1969-03-30 |
+| 1968-01-19 | 1968-01-20 |
++------------+------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 17. Get position of 'a' in name 'Sundar Pitchai' from employee table.
+mysql> # Way 1
+mysql> # using Position
+mysql> SELECT
+    ->   Fname,
+    ->   POSITION('a' IN Fname) "POSITION OF First a IN NAME"
+    -> FROM Employee;
++----------+-----------------------------+
+| Fname    | POSITION OF First a IN NAME |
++----------+-----------------------------+
+| JOHN     |                           0 |
+| FRANKLIN |                           3 |
+| JOYCE    |                           0 |
+| RAMESH   |                           2 |
+| JAMES    |                           2 |
+| ROBERT   |                           0 |
+| JENNIFER |                           0 |
+| AHMAD    |                           1 |
+| ALICIA   |                           1 |
++----------+-----------------------------+
+9 rows in set (0.00 sec)
+
+mysql> # Way2
+mysql> # using Locate
+mysql> SELECT
+    ->   Fname,
+    ->   LOCATE('a',Fname) "POSITION OF First a IN NAME"
+    -> FROM Employee;
++----------+-----------------------------+
+| Fname    | POSITION OF First a IN NAME |
++----------+-----------------------------+
+| JOHN     |                           0 |
+| FRANKLIN |                           3 |
+| JOYCE    |                           0 |
+| RAMESH   |                           2 |
+| JAMES    |                           2 |
+| ROBERT   |                           0 |
+| JENNIFER |                           0 |
+| AHMAD    |                           1 |
+| ALICIA   |                           1 |
++----------+-----------------------------+
+9 rows in set (0.00 sec)
+
+mysql> # Way 3
+mysql> # Using INSTR Gives the first occurence position
+mysql> SELECT
+    ->   Fname,
+    ->   INSTR(Fname,'a') "POSITION OF First a IN NAME"
+    -> FROM Employee;
++----------+-----------------------------+
+| Fname    | POSITION OF First a IN NAME |
++----------+-----------------------------+
+| JOHN     |                           0 |
+| FRANKLIN |                           3 |
+| JOYCE    |                           0 |
+| RAMESH   |                           2 |
+| JAMES    |                           2 |
+| ROBERT   |                           0 |
+| JENNIFER |                           0 |
+| AHMAD    |                           1 |
+| ALICIA   |                           1 |
++----------+-----------------------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 18. Get fname from employee table after removing white spaces from left side.
+mysql> SELECT LTRIM(Fname)
+    -> FROM Employee;
++--------------+
+| LTRIM(Fname) |
++--------------+
+| JOHN         |
+| FRANKLIN     |
+| JOYCE        |
+| RAMESH       |
+| JAMES        |
+| ROBERT       |
+| JENNIFER     |
+| AHMAD        |
+| ALICIA       |
++--------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 19. Get length of fname from employee table.
+mysql> SELECT
+    ->   Fname,
+    ->   LENGTH(Fname)
+    -> FROM Employee;
++----------+---------------+
+| Fname    | LENGTH(Fname) |
++----------+---------------+
+| JOHN     |             4 |
+| FRANKLIN |             8 |
+| JOYCE    |             5 |
+| RAMESH   |             6 |
+| JAMES    |             5 |
+| ROBERT   |             6 |
+| JENNIFER |             8 |
+| AHMAD    |             5 |
+| ALICIA   |             6 |
++----------+---------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 20. Get fname from employee table after replacing 'o' with '*'.
+mysql> SELECT REPLACE(Fname, 'O', '*')
+    -> FROM Employee;
++--------------------------+
+| REPLACE(Fname, 'O', '*') |
++--------------------------+
+| J*HN                     |
+| FRANKLIN                 |
+| J*YCE                    |
+| RAMESH                   |
+| JAMES                    |
+| R*BERT                   |
+| JENNIFER                 |
+| AHMAD                    |
+| ALICIA                   |
++--------------------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 21. Get fname and lname as a single attribute from employee table separated by a '_'.
+mysql> # Using CONCAT
+mysql> SELECT CONCAT(Fname, '_', Lname)
+    -> FROM Employee;
++---------------------------+
+| CONCAT(Fname, '_', Lname) |
++---------------------------+
+| JOHN_Smith                |
+| FRANKLIN_Wong             |
+| JOYCE_English             |
+| RAMESH_Narayan            |
+| JAMES_Borg                |
+| ROBERT_Scott              |
+| JENNIFER_Wallace          |
+| AHMAD_Jabbar              |
+| ALICIA_Zelaya             |
++---------------------------+
+9 rows in set (0.00 sec)
+
+mysql> # Using CONCAT_WS()
+mysql> SELECT CONCAT_WS('_',Fname,Lname)
+    -> FROM Employee;
++----------------------------+
+| CONCAT_WS('_',Fname,Lname) |
++----------------------------+
+| JOHN_Smith                 |
+| FRANKLIN_Wong              |
+| JOYCE_English              |
+| RAMESH_Narayan             |
+| JAMES_Borg                 |
+| ROBERT_Scott               |
+| JENNIFER_Wallace           |
+| AHMAD_Jabbar               |
+| ALICIA_Zelaya              |
++----------------------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 22. Find all employee records containing the word "Jai", regardless of whether it was
+mysql> # stored as JAI, Jai, or jai.
+mysql> # Using CONCAT and LIKE to compare entire Row
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE CONCAT(Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) LIKE '%John%';
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname | Minit | Lname | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| JOHN  | B     | Smith | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> # Using REGEXP
+mysql> 
+mysql> # 23. Find the number of employees according to the gender whose DOB is between
+mysql> # 05/01/1980 to 31/12/2016.
+mysql> SELECT
+    ->   Sex,
+    ->   COUNT(*)
+    -> FROM Employee
+    -> WHERE Bdate BETWEEN '1960-12-31' AND '1980-01-05'
+    -> GROUP BY Sex;
++------+----------+
+| Sex  | COUNT(*) |
++------+----------+
+| F    |        2 |
+| M    |        4 |
++------+----------+
+2 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 24. Retrieve the mysql username and password.
+mysql> # To DISPLAY USER DETAILS
+mysql> SELECT
+    ->   user,
+    ->   authentication_string
+    -> FROM mysql.user
+    -> WHERE user = 'root';
++------+-------------------------------------------+
+| user | authentication_string                     |
++------+-------------------------------------------+
+| root | *80618E81D79C899A2A7E762E9E4F1C16C5D149B2 |
++------+-------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 25. Find all the employee first name/s whose name consists of three or more words.
+mysql> # Using LIKE
+mysql> SELECT Fname
+    -> FROM Employee
+    -> WHERE Fname LIKE '% % %';
+Empty set (0.00 sec)
+
+mysql> # Using REGEXP
+mysql> SELECT Fname
+    -> FROM Employee
+    -> WHERE Fname REGEXP ' . ';
+Empty set (0.00 sec)
+
+mysql> # Using Length and Replace to count the number of substrings present
+mysql> SELECT Fname
+    -> FROM Employee
+    -> WHERE (LENGTH(Fname) - LENGTH(REPLACE(CONCAT(Fname), ' ', '')))/LENGTH(' ')=2;
+Empty set (0.00 sec)
+
+mysql> 
+mysql> # 26. Get employee details from employee table whose first name ends with 'n' and name
+mysql> # contains 4 letters.
+mysql> # Using Like and Length
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname LIKE '%n' AND LENGTH(Fname) = 4;
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname | Minit | Lname | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| JOHN  | B     | Smith | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> # Using just Like
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname LIKE '___N';
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname | Minit | Lname | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| JOHN  | B     | Smith | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> # Using REGEXP and Length
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname REGEXP 'n$' AND LENGTH(Fname) = 4;
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname | Minit | Lname | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| JOHN  | B     | Smith | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> # Using Just REGEXP
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname REGEXP '^.{3}n$';
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname | Minit | Lname | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+| JOHN  | B     | Smith | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
++-------+-------+-------+-----------+------------+--------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 27. Get employee details from employee table whose joining month is “January”.
+
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE MONTH(Bdate) = 01;
++--------+-------+--------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname  | Minit | Lname  | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++--------+-------+--------+-----------+------------+--------------------------+------+--------+-----------+------+
+| JOHN   | B     | Smith  | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
+| ALICIA | J     | Zelaya | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX  | F    |  25000 | 943775543 |    4 |
++--------+-------+--------+-----------+------------+--------------------------+------+--------+-----------+------+
+2 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 28. Get database date.
+mysql> # CURRENT DATE
+mysql> SELECT DATE(NOW());
++-------------+
+| DATE(NOW()) |
++-------------+
+| 2017-03-10  |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> # DB CREATION DATE
+mysql> SELECT MIN(create_time)
+    -> FROM INFORMATION_SCHEMA.TABLES
+    -> WHERE table_schema = 'Company1';
++---------------------+
+| MIN(create_time)    |
++---------------------+
+| 2017-02-21 21:05:57 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> # TABLE CREATION DATE
+mysql> SELECT create_time
+    -> FROM INFORMATION_SCHEMA.TABLES
+    -> WHERE table_schema = 'Company1' AND table_name = 'Department';
++---------------------+
+| create_time         |
++---------------------+
+| 2017-02-21 21:05:57 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 29. Fetch data that are common in two query results.
+mysql> # Using Join
+mysql> SELECT A.*
+    -> FROM (SELECT *
+    ->       FROM Employee
+    ->       WHERE Sex = 'F') A
+    ->   JOIN (SELECT *
+    ->         FROM Employee
+    ->         WHERE Salary > 40000) B ON A.Ssn = B.Ssn;
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX | F    |  43000 | 888665555 |    4 |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 30. Get first names of employees who has '*' in last_name.
+mysql> # Using Like
+mysql> SELECT Fname
+    -> FROM Employee
+    -> WHERE Lname LIKE '%*%';
+Empty set (0.00 sec)
+
+mysql> # Using REGEXP
+mysql> SELECT Fname
+    -> FROM Employee
+    -> WHERE Lname REGEXP '[*]';
+Empty set (0.00 sec)
+
+mysql> 
+mysql> # 31. Find department from dept table after replacing special character with a white space.
+mysql> SELECT REPLACE(Address, '', ' ')
+    -> FROM Employee;
++---------------------------------+
+| REPLACE(Address, '', ' ')       |
++---------------------------------+
+| 731 Fondren, Houston, TX        |
+| 638 Voss, Houston, TX           |
+| 5631 Rice, Houston, TX          |
+| 975 Fire Oak, Humble, TX        |
+| 450 Stone, Houston, TX          |
+| 2365 Newcastle Rd, Bellaire, TX |
+| 291 Berry, Bellaire, TX         |
+| 980 Dallas, Houston, TX         |
+| 3321 Castle, Spring, TX         |
++---------------------------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 32. Retrieve the number of employees joined with respect to a particular year and a
+mysql> # particular month from employee table.
+mysql> SELECT
+    ->   YEAR(Bdate),
+    ->   MONTH(Bdate),
+    ->   COUNT(*)
+    -> FROM Employee
+    -> GROUP BY YEAR(Bdate), MONTH(Bdate);
++-------------+--------------+----------+
+| YEAR(Bdate) | MONTH(Bdate) | COUNT(*) |
++-------------+--------------+----------+
+|        1937 |           11 |        1 |
+|        1941 |            6 |        1 |
+|        1955 |           12 |        1 |
+|        1962 |            9 |        1 |
+|        1965 |            1 |        1 |
+|        1968 |            1 |        1 |
+|        1969 |            3 |        1 |
+|        1972 |            6 |        1 |
+|        1972 |            7 |        1 |
++-------------+--------------+----------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 33. Extract characters within a specified range of length from department field.
+mysql> # Using SUBSTR
+mysql> SELECT
+    ->   SUBSTR(Dname, 3, 6),
+    ->   SUBSTR(Dname FROM 3 FOR 6)
+    -> FROM Department;
++---------------------+----------------------------+
+| SUBSTR(Dname, 3, 6) | SUBSTR(Dname FROM 3 FOR 6) |
++---------------------+----------------------------+
+| adquar              | adquar                     |
+| minist              | minist                     |
+| search              | search                     |
+| oducti              | oducti                     |
++---------------------+----------------------------+
+4 rows in set (0.00 sec)
+
+mysql> # Using SUBSTRING
+mysql> SELECT
+    ->   SUBSTRING(Dname, 3, 6),
+    ->   SUBSTRING(Dname FROM 3 FOR 6)
+    -> FROM Department;
++------------------------+-------------------------------+
+| SUBSTRING(Dname, 3, 6) | SUBSTRING(Dname FROM 3 FOR 6) |
++------------------------+-------------------------------+
+| adquar                 | adquar                        |
+| minist                 | minist                        |
+| search                 | search                        |
+| oducti                 | oducti                        |
++------------------------+-------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 34. Convert the name of the employee to lowercase and then as uppercase.
+mysql> # JUST DISPLAY
+mysql> SELECT
+    ->   LOWER(Fname),
+    ->   LCASE(Fname),
+    ->   UPPER(Fname),
+    ->   UCASE(Fname)
+    -> FROM Employee;
++--------------+--------------+--------------+--------------+
+| LOWER(Fname) | LCASE(Fname) | UPPER(Fname) | UCASE(Fname) |
++--------------+--------------+--------------+--------------+
+| john         | john         | JOHN         | JOHN         |
+| franklin     | franklin     | FRANKLIN     | FRANKLIN     |
+| joyce        | joyce        | JOYCE        | JOYCE        |
+| ramesh       | ramesh       | RAMESH       | RAMESH       |
+| james        | james        | JAMES        | JAMES        |
+| robert       | robert       | ROBERT       | ROBERT       |
+| jennifer     | jennifer     | JENNIFER     | JENNIFER     |
+| ahmad        | ahmad        | AHMAD        | AHMAD        |
+| alicia       | alicia       | ALICIA       | ALICIA       |
++--------------+--------------+--------------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> # TO LOWER
+mysql> UPDATE Employee
+    -> SET Fname = LOWER(Fname);
+Query OK, 9 rows affected (0.03 sec)
+Rows matched: 9  Changed: 9  Warnings: 0
+
+mysql> # TO UPPER
+mysql> UPDATE Employee
+    -> SET Fname = UPPER(Fname);
+Query OK, 9 rows affected (0.03 sec)
+Rows matched: 9  Changed: 9  Warnings: 0
+
+mysql> # TO LCASE
+mysql> UPDATE Employee
+    -> SET Fname = LCASE(Fname);
+Query OK, 9 rows affected (0.04 sec)
+Rows matched: 9  Changed: 9  Warnings: 0
+
+mysql> # TO UCASE
+mysql> UPDATE Employee
+    -> SET Fname = UCASE(Fname);
+Query OK, 9 rows affected (0.03 sec)
+Rows matched: 9  Changed: 9  Warnings: 0
+
+mysql> 
+mysql> # 35. Select FIRST n records from a department table.
+mysql> # Using LIMIT
+mysql> SELECT *
+    -> FROM Department
+    -> LIMIT 2;
++----------------+---------+-----------+----------------+
+| Dname          | Dnumber | Mgr_ssn   | Mgr_start_date |
++----------------+---------+-----------+----------------+
+| Headquarters   |       1 | 888665555 | 1981-06-19     |
+| Administration |       4 | 987654321 | 1995-01-01     |
++----------------+---------+-----------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 36. Select LAST n records from a department table.
+mysql> # SET @rn=0;
+mysql> # SELECT @rn:=COUNT(*)-3 FROM Employee;
+mysql> # Using Offset of M-n where M=size of table and n=to be shown rows
+mysql> SELECT *
+    -> FROM Employee
+    -> LIMIT 3 OFFSET 6;
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX | F    |  43000 | 888665555 |    4 |
+| AHMAD    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX | M    |  25000 | 987654321 |    4 |
+| ALICIA   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX | F    |  25000 | 943775543 |    4 |
++----------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 37. Select first name from employee table which contain only numbers.
+mysql> # USING ASCII AND LOWER UPPER
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE ASCII(LOWER(Fname)) = ASCII(UPPER(Fname));
+Empty set (0.00 sec)
+
+mysql> # USING REGEXP
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname REGEXP '^[0-9]+$';
+Empty set (0.00 sec)
+
+mysql> 
+mysql> # 38. Get fname, lname from employee table as separate rows.
+mysql> # Using GROUP_CONCAT
+mysql> (SELECT
+    ->    "Fname: ",
+    ->    GROUP_CONCAT(Fname SEPARATOR ', ')
+    ->  FROM Employee)
+    -> UNION (SELECT
+    ->          "Lname: ",
+    ->          GROUP_CONCAT(Lname SEPARATOR ', ')
+    ->        FROM Employee);
++---------+-----------------------------------------------------------------------+
+| Fname:  | GROUP_CONCAT(Fname SEPARATOR ', ')                                    |
++---------+-----------------------------------------------------------------------+
+| Fname:  | JOHN, FRANKLIN, JOYCE, RAMESH, JAMES, ROBERT, JENNIFER, AHMAD, ALICIA |
+| Lname:  | Smith, Wong, English, Narayan, Borg, Scott, Wallace, Jabbar, Zelaya   |
++---------+-----------------------------------------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 39. Create an empty table emptem with the same structure as emp.
+mysql> # Way 1
+mysql> CREATE TABLE Emptem AS SELECT *
+    ->                        FROM Employee
+    ->                        WHERE 1 != 1;
+Query OK, 0 rows affected (0.24 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> # Way 2
+mysql> CREATE TABLE Emptem AS SELECT *
+    ->                        FROM Employee
+    ->                        LIMIT 0;
+ERROR 1050 (42S01): Table 'Emptem' already exists
+mysql> # Way 3
+mysql> CREATE TABLE Emptem LIKE Employee;
+ERROR 1050 (42S01): Table 'Emptem' already exists
+mysql> # Displaying entire new table to check the query
+mysql> SELECT *
+    -> FROM Emptem;
+Empty set (0.00 sec)
+
+mysql> 
+mysql> # 40. If there are two tables emp1 and emp2, and both have common records. Fetch all the
+mysql> # records, but common records only once?
+mysql> # Inserting some records into emptem
+mysql> INSERT INTO
+    -> Emptem VALUES
+    ->   ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+    ->   ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+    ->   ('Joyce','A','English',453453453,'1972-07-31','5631 Rice, Houston, TX','F',25000,333445555,5);
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> # Using UNION
+mysql> (SELECT *
+    ->  FROM Emptem)
+    -> UNION (SELECT *
+    ->        FROM Employee);
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                         | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX        | M    |  30000 | 333445555 |    5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX           | M    |  40000 | 888665555 |    5 |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX          | F    |  25000 | 333445555 |    5 |
+| RAMESH   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX        | M    |  38000 | 333445555 |    5 |
+| JAMES    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX          | M    |  55000 |      NULL |    1 |
+| ROBERT   | F     | Scott   | 943775543 | 1972-06-21 | 2365 Newcastle Rd, Bellaire, TX | M    |  58000 | 888665555 |    1 |
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX         | F    |  43000 | 888665555 |    4 |
+| AHMAD    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX         | M    |  25000 | 987654321 |    4 |
+| ALICIA   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX         | F    |  25000 | 943775543 |    4 |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 41. Extract only common records from two tables emp1 and emp2?
+mysql> # Using INNER JOIN
+mysql> SELECT Emptem.*
+    -> FROM Emptem
+    ->   JOIN Employee WHERE Emptem.Ssn=Employee.Ssn;
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                  | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+| John     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX | M    |  30000 | 333445555 |    5 |
+| Franklin | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX    | M    |  40000 | 888665555 |    5 |
+| Joyce    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX   | F    |  25000 | 333445555 |    5 |
++----------+-------+---------+-----------+------------+--------------------------+------+--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 42. Retrieve all records of emp1 those should not present in emp2?
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE NOT EXISTS(SELECT *
+    ->                  FROM Emptem
+    ->                  WHERE Emptem.Ssn = Employee.Ssn);
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                         | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| RAMESH   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX        | M    |  38000 | 333445555 |    5 |
+| JAMES    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX          | M    |  55000 |      NULL |    1 |
+| ROBERT   | F     | Scott   | 943775543 | 1972-06-21 | 2365 Newcastle Rd, Bellaire, TX | M    |  58000 | 888665555 |    1 |
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX         | F    |  43000 | 888665555 |    4 |
+| AHMAD    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX         | M    |  25000 | 987654321 |    4 |
+| ALICIA   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX         | F    |  25000 | 943775543 |    4 |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+6 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 43. Returns the default (current) database name.
+mysql> # Using Database()
+mysql> SELECT DATABASE();
++------------+
+| DATABASE() |
++------------+
+| Company1   |
++------------+
+1 row in set (0.00 sec)
+
+mysql> # Using Schema()
+mysql> SELECT SCHEMA();
++----------+
+| SCHEMA() |
++----------+
+| Company1 |
++----------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 44. Retrieve the current MySQL user name and host name.
+mysql> # Using CURRENT_USER()
+mysql> SELECT CURRENT_USER;
++----------------+
+| CURRENT_USER   |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> # Using User()
+mysql> SELECT USER();
++----------------+
+| USER()         |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 45. Find the string that tells the MySQL server version.
+mysql> SELECT
+    ->   SUBSTR(VERSION(), LOCATE('-', VERSION()) + 1)    AS "OS",
+    ->   SUBSTR(VERSION(), 1, LOCATE('-', VERSION()) - 1) AS "Mysql Server Version";
++------------------+----------------------+
+| OS               | Mysql Server Version |
++------------------+----------------------+
+| 0ubuntu0.16.10.1 | 5.7.17               |
++------------------+----------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 46. Perform Bitwise OR, Bitwise XOR and Bitwise AND.
+mysql> # Declaring 2 Variables and Initializing them
+mysql> SET @a=15,@b=39;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> # Using |,&,^ to do the required Bitwise Operation
+mysql> SELECT (@a | @b) AS "BITWISE OR (a,b)",
+    ->        (@a & @b) AS "BITWISE AND (a,b)",
+    ->        (@a ^ @b) AS "BITWISE XOR (a,b)";
++------------------+-------------------+-------------------+
+| BITWISE OR (a,b) | BITWISE AND (a,b) | BITWISE XOR (a,b) |
++------------------+-------------------+-------------------+
+|               47 |                 7 |                40 |
++------------------+-------------------+-------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 47. Find rows that contain at least one of the two words ‘voss’, ‘castle’.
+
+mysql> # Using CONCAT and REGEXP to compare entire Row (Other way is to use LIKE and DO an OR)
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE CONCAT(Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno) REGEXP 'voss|castle';
++----------+-------+--------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname  | Ssn       | Bdate      | Address                         | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+--------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| FRANKLIN | T     | Wong   | 333445555 | 1955-12-08 | 638 Voss, Houston, TX           | M    |  40000 | 888665555 |    5 |
+| ROBERT   | F     | Scott  | 943775543 | 1972-06-21 | 2365 Newcastle Rd, Bellaire, TX | M    |  58000 | 888665555 |    1 |
+| ALICIA   | J     | Zelaya | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX         | F    |  25000 | 943775543 |    4 |
++----------+-------+--------+-----------+------------+---------------------------------+------+--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> # Comparing Entire row
+mysql> 
+mysql> # 48. Find the difference between two dates and print in terms of the number of days.
+mysql> # Using DATEDIFF
+mysql> SELECT
+    ->   Fname,
+    ->   Lname,
+    ->   DATEDIFF(CURRENT_DATE,Bdate) AS "AGE IN DAYS"
+    -> FROM Employee;
++----------+---------+-------------+
+| Fname    | Lname   | AGE IN DAYS |
++----------+---------+-------------+
+| JOHN     | Smith   |       19053 |
+| FRANKLIN | Wong    |       22373 |
+| JOYCE    | English |       16293 |
+| RAMESH   | Narayan |       19900 |
+| JAMES    | Borg    |       28975 |
+| ROBERT   | Scott   |       16333 |
+| JENNIFER | Wallace |       27656 |
+| AHMAD    | Jabbar  |       17513 |
+| ALICIA   | Zelaya  |       17948 |
++----------+---------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 49. Add one day to the current date.
+mysql> # Using + INTERVAL
+mysql> SELECT CURRENT_DATE + INTERVAL 1 DAY;
++-------------------------------+
+| CURRENT_DATE + INTERVAL 1 DAY |
++-------------------------------+
+| 2017-03-11                    |
++-------------------------------+
+1 row in set (0.00 sec)
+
+mysql> # Using DATE_ADD
+mysql> SELECT DATE_ADD(CURRENT_DATE,INTERVAL 1 DAY);
++---------------------------------------+
+| DATE_ADD(CURRENT_DATE,INTERVAL 1 DAY) |
++---------------------------------------+
+| 2017-03-11                            |
++---------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> # Using ADDDATE
+mysql> SELECT ADDDATE(CURRENT_DATE,INTERVAL 1 DAY);
++--------------------------------------+
+| ADDDATE(CURRENT_DATE,INTERVAL 1 DAY) |
++--------------------------------------+
+| 2017-03-11                           |
++--------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT ADDDATE('2017-03-31',1); # ADD DATE CAN BE USED WITHOUT INTERVAL ADDING DAYS IN DEFAULT
++-------------------------+
+| ADDDATE('2017-03-31',1) |
++-------------------------+
+| 2017-04-01              |
++-------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 50. Add two hours and 5000 minutes to the current date and print the new date.
+mysql> # Using +INTERVAL
+mysql> SELECT CURRENT_TIMESTAMP + INTERVAL 2 HOUR + INTERVAL 5000 MINUTE;
++------------------------------------------------------------+
+| CURRENT_TIMESTAMP + INTERVAL 2 HOUR + INTERVAL 5000 MINUTE |
++------------------------------------------------------------+
+| 2017-03-13 20:42:06                                        |
++------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 51. Find the floor and ceil values of a floating point number. Also operate on the power,
+mysql> # log, modulus, round off and truncate functions.
+mysql> # Declaring a variabkle and initialising it
+mysql> SET @flop1=3.2554;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> # Using all possible Mathematical Functions in mysql
+mysql> SELECT
+    ->   @flop1,
+    ->   ABS(-33),
+    ->   FLOOR(@flop1),
+    ->   CEIL(@flop1),
+    ->   ROUND(@flop1,2),
+    ->   ROUND(POWER(@flop1,2),4),
+    ->   LOG10(@flop1),
+    ->   LOG2(@flop1),
+    ->   LOG(2,@flop1),
+    ->   MOD(FLOOR(@flop1),CEIL(@flop1)),
+    ->   TRUNCATE(@flop1,2);
++--------+----------+---------------+--------------+-----------------+--------------------------+--------------------+-------------------+-------------------+---------------------------------+--------------------+
+| @flop1 | ABS(-33) | FLOOR(@flop1) | CEIL(@flop1) | ROUND(@flop1,2) | ROUND(POWER(@flop1,2),4) | LOG10(@flop1)      | LOG2(@flop1)      | LOG(2,@flop1)     | MOD(FLOOR(@flop1),CEIL(@flop1)) | TRUNCATE(@flop1,2) |
++--------+----------+---------------+--------------+-----------------+--------------------------+--------------------+-------------------+-------------------+---------------------------------+--------------------+
+| 3.2554 |       33 |             3 |            4 |            3.26 |                  10.5976 | 0.5126043591468317 | 1.702834822211592 | 1.702834822211592 |                               3 |               3.25 |
++--------+----------+---------------+--------------+-----------------+--------------------------+--------------------+-------------------+-------------------+---------------------------------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 52. In a string attribute of the company schema, match the following using regular
+mysql> # expression.
+mysql> # -----NOTE: For CASE SENSITIVE Comparisons sue REGEXP BINARY
+mysql> # a) Beginning of the string.
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname REGEXP '^[a-f]';
++----------+-------+--------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname  | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+--------+-----------+------------+-------------------------+------+--------+-----------+------+
+| FRANKLIN | T     | Wong   | 333445555 | 1955-12-08 | 638 Voss, Houston, TX   | M    |  40000 | 888665555 |    5 |
+| AHMAD    | V     | Jabbar | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX | M    |  25000 | 987654321 |    4 |
+| ALICIA   | J     | Zelaya | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX | F    |  25000 | 943775543 |    4 |
++----------+-------+--------+-----------+------------+-------------------------+------+--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> # b) Match any character (including carriage return and newline).
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Address REGEXP '^.*$';
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                         | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| JOHN     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX        | M    |  30000 | 333445555 |    5 |
+| FRANKLIN | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX           | M    |  40000 | 888665555 |    5 |
+| JOYCE    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX          | F    |  25000 | 333445555 |    5 |
+| RAMESH   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX        | M    |  38000 | 333445555 |    5 |
+| JAMES    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX          | M    |  55000 |      NULL |    1 |
+| ROBERT   | F     | Scott   | 943775543 | 1972-06-21 | 2365 Newcastle Rd, Bellaire, TX | M    |  58000 | 888665555 |    1 |
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX         | F    |  43000 | 888665555 |    4 |
+| AHMAD    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX         | M    |  25000 | 987654321 |    4 |
+| ALICIA   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX         | F    |  25000 | 943775543 |    4 |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # c) Match the end of a string.
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname REGEXP '[a-f]$';
++--------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname  | Minit | Lname   | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++--------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+| JOYCE  | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX  | F    |  25000 | 333445555 |    5 |
+| AHMAD  | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX | M    |  25000 | 987654321 |    4 |
+| ALICIA | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX | F    |  25000 | 943775543 |    4 |
++--------+-------+---------+-----------+------------+-------------------------+------+--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> # d) Any sequence of zero or more 'a' characters.
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname REGEXP 'a*';
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname   | Ssn       | Bdate      | Address                         | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+| JOHN     | B     | Smith   | 123456789 | 1965-01-09 | 731 Fondren, Houston, TX        | M    |  30000 | 333445555 |    5 |
+| FRANKLIN | T     | Wong    | 333445555 | 1955-12-08 | 638 Voss, Houston, TX           | M    |  40000 | 888665555 |    5 |
+| JOYCE    | A     | English | 453453453 | 1972-07-31 | 5631 Rice, Houston, TX          | F    |  25000 | 333445555 |    5 |
+| RAMESH   | K     | Narayan | 666884444 | 1962-09-15 | 975 Fire Oak, Humble, TX        | M    |  38000 | 333445555 |    5 |
+| JAMES    | E     | Borg    | 888665555 | 1937-11-10 | 450 Stone, Houston, TX          | M    |  55000 |      NULL |    1 |
+| ROBERT   | F     | Scott   | 943775543 | 1972-06-21 | 2365 Newcastle Rd, Bellaire, TX | M    |  58000 | 888665555 |    1 |
+| JENNIFER | S     | Wallace | 987654321 | 1941-06-21 | 291 Berry, Bellaire, TX         | F    |  43000 | 888665555 |    4 |
+| AHMAD    | V     | Jabbar  | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX         | M    |  25000 | 987654321 |    4 |
+| ALICIA   | J     | Zelaya  | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX         | F    |  25000 | 943775543 |    4 |
++----------+-------+---------+-----------+------------+---------------------------------+------+--------+-----------+------+
+9 rows in set (0.00 sec)
+
+mysql> 
+mysql> # e) Either of the sequences xy or abc.
+mysql> SELECT *
+    -> FROM Employee
+    -> WHERE Fname REGEXP 'ahm|fra|ali';
++----------+-------+--------+-----------+------------+-------------------------+------+--------+-----------+------+
+| Fname    | Minit | Lname  | Ssn       | Bdate      | Address                 | Sex  | Salary | Super_ssn | Dno  |
++----------+-------+--------+-----------+------------+-------------------------+------+--------+-----------+------+
+| FRANKLIN | T     | Wong   | 333445555 | 1955-12-08 | 638 Voss, Houston, TX   | M    |  40000 | 888665555 |    5 |
+| AHMAD    | V     | Jabbar | 987987987 | 1969-03-29 | 980 Dallas, Houston, TX | M    |  25000 | 987654321 |    4 |
+| ALICIA   | J     | Zelaya | 999887777 | 1968-01-19 | 3321 Castle, Spring, TX | F    |  25000 | 943775543 |    4 |
++----------+-------+--------+-----------+------------+-------------------------+------+--------+-----------+------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> # 53. Compare two strings and print the value ‘yes’ if they are equal, else ‘no’.
+
+mysql> # Using STRCMP
+mysql> SELECT IF(STRCMP('test', 'test'), 'NO', 'YES') STRING_COMPARE;
++----------------+
+| STRING_COMPARE |
++----------------+
+| YES            |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> # Using LIKE
+mysql> SELECT IF('test' LIKE 'test1', 'YES', 'NO') STRING_COMPARE;
++----------------+
+| STRING_COMPARE |
++----------------+
+| NO             |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 54. Simulate the “IF... ELSE” construct in Mysql for a mark and grade setup.
+
+mysql> # Using only NESTED IF
+mysql> SET @mark=65;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT IF(@mark > 90,
+    ->           'A', IF(@mark > 80,
+    ->                   'B', IF(@mark > 70,
+    ->                           'C', IF(@mark > 60,
+    ->                                   'D', IF(@mark > 50,
+    ->                                           'E', IF(@mark > 40,
+    ->                                                   'F', 'U')))))) AS GRADE;
++-------+
+| GRADE |
++-------+
+| D     |
++-------+
+1 row in set (0.00 sec)
+
+mysql> # CASE WHEN THEN ELSE
+mysql> SET @mark=65;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT
+    ->   @mark        AS MARK,
+    ->   CASE WHEN @mark > 90
+    ->     THEN 'A'
+    ->   WHEN @mark > 80
+    ->     THEN 'B'
+    ->   WHEN @mark > 70
+    ->     THEN 'C'
+    ->   WHEN @mark > 60
+    ->     THEN 'D'
+    ->   WHEN @mark > 50
+    ->     THEN 'E'
+    ->   WHEN @mark > 40
+    ->     THEN 'F'
+    ->   ELSE 'U' END AS GRADE;
++------+-------+
+| MARK | GRADE |
++------+-------+
+|   65 | D     |
++------+-------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # 55. Use IFNULL to check whether an mathematical expression gives a NULL value or
+mysql> # not.
+mysql> SELECT IFNULL(1/0,'YES');
++-------------------+
+| IFNULL(1/0,'YES') |
++-------------------+
+| YES               |
++-------------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> 
+mysql> # 56. Grant all the access privileges to a user.
+mysql> # GRANT ALL PRIVILEGES ON *.* TO 'user'@'%'
+mysql> # WITH GRANT OPTION;
+mysql> # GRANT ALL PRIVILEGES ON mydb.* TO myuser@localhost
+mysql> # IDENTIFIED BY 'mypasswd';
+mysql> GRANT ALL PRIVILEGES ON Company1.* TO akshay@localhost
+    -> IDENTIFIED BY 'qaz';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> 
+mysql> # Deleting unnecessary Tables
+mysql> DROP TABLE IF EXISTS Emptem;
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> DROP TABLE IF EXISTS COPYEMP;
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> 
+mysql> # Disable Outfile
+mysql> notee;

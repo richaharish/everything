@@ -1,0 +1,7 @@
+Capture on all interfaces
+As Wireshark can capture on multiple interfaces it is possible to choose to capture on all available
+interfaces.
+Capture all packets in promiscuous mode
+This checkbox allows you to specify that Wireshark should put all interfaces in promiscuous mode
+when capturing.
+

@@ -1,0 +1,919 @@
+mysql> create table FLIGHTS(FLNO INT ,FROM CHAR(20),TO CHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE INT, PRIMARY KEY(FLNO) );
+ERROR 1046 (3D000): No database selected
+mysql> USE flight;
+Database changed
+mysql> create table FLIGHTS(FLNO INT ,FROM CHAR(20),TO CHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE INT, PRIMARY KEY(FLNO) );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM CHAR(20),TO CHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE INT, ' at line 1
+mysql> create table FLIGHTS(FLNO INT ,FROM varCHAR(20),TO varCHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE INT, PRIMARY KEY(FLNO) );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM varCHAR(20),TO varCHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE' at line 1
+mysql> create table FLIGHTS(FLNO INT primary key,FROM varCHAR(20),TO varCHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE INT );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM varCHAR(20),TO varCHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE' at line 1
+mysql> create table FLIGHTS(FLNO INT primary key,FROM varchar(20),TO varCHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE INT );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM varchar(20),TO varCHAR(20),DISTANCE INT , DEPARTS TIME ,ARRIVES TIME ,PRICE' at line 1
+mysql> create table flights(flno int primary key ,from varchar(20),to varchar(20),distance int ,departs time ,arrives time ,price int);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from varchar(20),to varchar(20),distance int ,departs time ,arrives time ,price ' at line 1
+mysql> create table aircraf(aid int primary key,aname varchar(20),cruisingrange int );
+Query OK, 0 rows affected (0.70 sec)
+
+mysql> create table aircraft(aid int primary key,aname varchar(20),cruisingrange int );
+Query OK, 0 rows affected (0.63 sec)
+
+mysql> create table flights(flno int primary key ,from varchar(20),to varchar(20),distance int ,departs time ,arrives time ,price int );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from varchar(20),to varchar(20),distance int ,departs time ,arrives time ,price ' at line 1
+mysql> create table flights(flno int primary key ,fromplace varchar(20),toplace varchar(20),distance int ,departs time ,arrives time ,price int );
+Query OK, 0 rows affected (0.76 sec)
+
+mysql> create table certified(eid int ,aid int,primary key(eid,aid));
+Query OK, 0 rows affected (0.51 sec)
+
+mysql> create table employees(eid int primary key, ename varchar(20),salary int );
+Query OK, 0 rows affected (0.83 sec)
+
+mysql> create table employees(eid int primary key, ename varchar(20),salary int );
+ERROR 1050 (42S01): Table 'employees' already exists
+mysql> 
+mysql> 
+mysql> ;
+ERROR: 
+No query specified
+
+mysql> INSERT INTO flights values(1,'hyderabad' ,'chennai',1200,'09:30:00','11:00:00',1500);
+Query OK, 1 row affected (0.48 sec)
+
+mysql> select * from flights;
++------+-----------+---------+----------+----------+----------+-------+
+| flno | fromplace | toplace | distance | departs  | arrives  | price |
++------+-----------+---------+----------+----------+----------+-------+
+|    1 | hyderabad | chennai |     1200 | 09:30:00 | 11:00:00 |  1500 |
++------+-----------+---------+----------+----------+----------+-------+
+1 row in set (0.00 sec)
+
+mysql> ;
+ERROR: 
+No query specified
+
+mysql> INSERT INTO flights values(2,'los angeles' ,'chennai',2000,'09:00:00','15:00:00',15000);
+Query OK, 1 row affected (0.40 sec)
+
+mysql> INSERT INTO flights values(3,'chennai' ,'chicago',2500,'02:00:00','11:00:00',15000);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select *from flights;
++------+-------------+---------+----------+----------+----------+-------+
+| flno | fromplace   | toplace | distance | departs  | arrives  | price |
++------+-------------+---------+----------+----------+----------+-------+
+|    1 | hyderabad   | chennai |     1200 | 09:30:00 | 11:00:00 |  1500 |
+|    2 | los angeles | chennai |     2000 | 09:00:00 | 15:00:00 | 15000 |
+|    3 | chennai     | chicago |     2500 | 02:00:00 | 11:00:00 | 15000 |
++------+-------------+---------+----------+----------+----------+-------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO flights values(5,'los angeles' ,'honolulu',1923,'02:00:00','1:40:00',1200);
+Query OK, 1 row affected (0.39 sec)
+
+mysql> INSERT INTO flights values(5,'los angeles' ,'chicago',1323,'23:00:00','4:40:00',2000);
+ERROR 1062 (23000): Duplicate entry '5' for key 'PRIMARY'
+mysql> INSERT INTO flights values(7,'los angeles' ,'chicago',1323,'23:00:00','4:40:00',2000);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> select * from flight;
+ERROR 1146 (42S02): Table 'flight.flight' doesn't exist
+mysql> select * from flights;
++------+-------------+----------+----------+----------+----------+-------+
+| flno | fromplace   | toplace  | distance | departs  | arrives  | price |
++------+-------------+----------+----------+----------+----------+-------+
+|    1 | hyderabad   | chennai  |     1200 | 09:30:00 | 11:00:00 |  1500 |
+|    2 | los angeles | chennai  |     2000 | 09:00:00 | 15:00:00 | 15000 |
+|    3 | chennai     | chicago  |     2500 | 02:00:00 | 11:00:00 | 15000 |
+|    5 | los angeles | honolulu |     1923 | 02:00:00 | 01:40:00 |  1200 |
+|    7 | los angeles | chicago  |     1323 | 23:00:00 | 04:40:00 |  2000 |
++------+-------------+----------+----------+----------+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO aircraft values (23,'boeing',1200);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> INSERT INTO aircraft values (23,'boeing',2000);
+ERROR 1062 (23000): Duplicate entry '23' for key 'PRIMARY'
+mysql> INSERT INTO aircraft values (13,'boeing',2000);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO aircraft values (3,'air india',2000);
+Query OK, 1 row affected (0.40 sec)
+
+mysql> INSERT INTO aircraft values (32,'air india',1923);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> INSERT INTO aircraft values (2,'spice jet ',1923);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> INSERT INTO aircraft values (24,'spice jet ',1323);
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select *from aircraft;
++-----+------------+---------------+
+| aid | aname      | cruisingrange |
++-----+------------+---------------+
+|   2 | spice jet  |          1923 |
+|   3 | air india  |          2000 |
+|  13 | boeing     |          2000 |
+|  23 | boeing     |          1200 |
+|  24 | spice jet  |          1323 |
+|  32 | air india  |          1923 |
++-----+------------+---------------+
+6 rows in set (0.00 sec)
+
+QUESTION 1;
+ 
+mysql> select A.aname from aircraft A where A.aid in (select C.aid from certified C ,employees E where E.EID=C.EID AND SALARY>80000 );
+Empty set (0.00 sec)
+
+mysql> select A.aname from aircraft A where A.aid in (select C.aid from certified C ,employees E where E.EID=C.EID AND SALARY>20000 );
++------------+
+| aname      |
++------------+
+| spice jet  |
+| air india  |
+| boeing     |
+| boeing     |
+| spice jet  |
+| air india  |
++------------+
+6 rows in set (0.00 sec)
+
+mysql> select A.aname from aircraft A where A.aid in (select C.aid from certified C ,employees E where E.EID=C.EID AND SALARY>30000 );
++------------+
+| aname      |
++------------+
+| spice jet  |
+| boeing     |
++------------+
+2 rows in set (0.00 sec)
+
+ 
+ 
+mysql> select * from certified group by eid having count(aid)>=3;
+ERROR 1055 (42000): Expression #2 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'flight.certified.aid' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select eid from certified group by eid having count(aid)>=3;
++-----+
+| eid |
++-----+
+|   1 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> select eid from certified group by eid having count(aid)>=2;
++-----+
+| eid |
++-----+
+|   1 |
+|   5 |
+|  12 |
++-----+
+3 rows in set (0.00 sec)
+
+ 
+question  3;
+ 
+mysql> select ename from employees where salary<(select min(price)from flights where fromplace='los angeles'and toplace='honolulu');
+Empty set (0.00 sec)
+
+mysql> select ename from employees where salary>(select min(price)from flights where fromplace='los angeles'and toplace='honolulu');
++--------+
+| ename  |
++--------+
+| rahul  |
+| sania  |
+| nitara |
+| nipun  |
+| shona  |
++--------+
+5 rows in set (0.00 sec)
+
+question  4;
+ 
+mysql> select avg(E.salary),A.aname from employees E ,aircraft A,CERTIFIED C where A.cruisingrange>1000 and C.eid=E.eid AND C.AID=A.AID GROUP BY A.AID;
+ERROR 1146 (42S02): Table 'flight.CERTIFIED' doesn't exist
+mysql> select avg(E.salary),A.aname from employees E ,aircraft A,certified C where A.cruisingrange>1000 and C.eid=E.eid AND C.AID=A.AID GROUP BY A.AID;
++---------------+------------+
+| avg(E.salary) | aname      |
++---------------+------------+
+|    31300.0000 | spice jet  |
+|    25000.0000 | air india  |
+|    27700.0000 | boeing     |
+|    30000.0000 | boeing     |
+|    23000.0000 | spice jet  |
+|    24000.0000 | air india  |
++---------------+------------+
+6 rows in set (0.00 sec)
+
+ question 2;
+
+mysql> select max( A.cruisingrange) ,C.eid from aircraft A ,certified C where A.aid=C.aid and C.eid in  (select eid from certified group by eid having count(aid)>=2)group by C.eid;
++-----------------------+-----+
+| max( A.cruisingrange) | eid |
++-----------------------+-----+
+|                  2000 |   1 |
+|                  1923 |   5 |
+|                  2000 |  12 |
++-----------------------+-----+
+3 rows in set (0.00 sec)
+E question 2;
+ 
+mysql> SELECT A.CRUISINGRANGE,C.eid FROM aircraft A,certified C where C.AID=A.AID AND C.eid in(select F.eid from certified F group by F.eid having COUNT(F.aid)>=3);
++---------------+-----+
+| CRUISINGRANGE | eid |
++---------------+-----+
+|          2000 |   1 |
+|          2000 |   1 |
+|          1923 |   1 |
++---------------+-----+
+3 rows in set (0.00 sec)
+
+mysql> QUESTION 5;
+ 
+mysql> select ename from employees where eid in (select C.eid from certified C,aircraft A  where A.AID=C.AID AND A.aname='boeing'and A.cruisingrange in (select max(distance) from flights where fromplace='hyderabad') );
++--------+
+| ename  |
++--------+
+| nitara |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select * from employees;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | rahul  |  25000 |
+|   3 | ritika |  30000 |
+|   5 | sania  |  23000 |
+|   7 | nitara |  30000 |
+|  12 | nipun  |  30400 |
+|  13 | pawan  |  30500 |
+|  14 | shona  |  32200 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select * from airlines;
+ERROR 1146 (42S02): Table 'flight.airlines' doesn't exist
+mysql> select * from aircraft;
++-----+------------+---------------+
+| aid | aname      | cruisingrange |
++-----+------------+---------------+
+|   2 | spice jet  |          1923 |
+|   3 | air india  |          2000 |
+|  13 | boeing     |          2000 |
+|  23 | boeing     |          1200 |
+|  24 | spice jet  |          1323 |
+|  32 | air india  |          1923 |
++-----+------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from certified;
++-----+-----+
+| eid | aid |
++-----+-----+
+|   1 |   3 |
+|   1 |  13 |
+|   1 |  32 |
+|   5 |  24 |
+|   5 |  32 |
+|   7 |  23 |
+|  12 |   2 |
+|  12 |  13 |
+|  14 |   2 |
++-----+-----+
+9 rows in set (0.00 sec)
+
+mysql> select * from flights;
++------+-------------+----------+----------+----------+----------+-------+
+| flno | fromplace   | toplace  | distance | departs  | arrives  | price |
++------+-------------+----------+----------+----------+----------+-------+
+|    1 | hyderabad   | chennai  |     1200 | 09:30:00 | 11:00:00 |  1500 |
+|    2 | los angeles | chennai  |     2000 | 09:00:00 | 15:00:00 | 15000 |
+|    3 | chennai     | chicago  |     2500 | 02:00:00 | 11:00:00 | 15000 |
+|    5 | los angeles | honolulu |     1923 | 02:00:00 | 01:40:00 |  1200 |
+|    7 | los angeles | chicago  |     1323 | 23:00:00 | 04:40:00 |  2000 |
++------+-------------+----------+----------+----------+----------+-------+
+5 rows in set (0.01 sec)
+
+mysql> select ename from employees where eid in (select C.eid from certified C,aircraft A  where A.AID=C.AID AND A.aname='boeing'and A.cruisingrange in (select max(distance) from flights where fromplace='los angeles') );
++-------+
+| ename |
++-------+
+| rahul |
+| nipun |
++-------+
+2 rows in set (0.00 sec)
+
+question 6;
+ 
+mysql> select aid from aircraft where cruisingrange in (select distance from flights where fromplace='los angeles' and toplace='chicago');
++-----+
+| aid |
++-----+
+|  24 |
++-----+
+1 row in set (0.00 sec)
+question 7;
+mysql> select F.fromplace, F.toplace from flights F ,aircraft A ,certified C  where F.distance=A.cruisingrange and A.aid=C.AID and C.eid in ( select  eid from employees where salary>100000);
+Empty set (0.34 sec)
+
+mysql> SELECT * FROM employees;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | rahul  |  25000 |
+|   5 | sania  |  23000 |
+|   7 | nitara |  30000 |
+|  12 | nipun  |  30400 |
+|  14 | shona  |  32200 |
++-----+--------+--------+
+5 rows in set (0.00 sec)
+
+
+mysql> question 8;
+ 
+mysql> select E.ename from employees E where E.eid in (select C.eid from certified C ,aircraft A where A.cruisingrange>3000 and A.aid=C.aid ) and E.eid not in (select W.eid from certified W ,aircraft B where W.aid=B.aid and B.aname='boeing');
+Empty set (0.03 sec)
+
+mysql> select * from aircraft ;
++-----+------------+---------------+
+| aid | aname      | cruisingrange |
++-----+------------+---------------+
+|   2 | spice jet  |          1923 |
+|   3 | air india  |          2000 |
+|  13 | boeing     |          2000 |
+|  23 | boeing     |          1200 |
+|  24 | spice jet  |          1323 |
+|  32 | air india  |          1923 |
++-----+------------+---------------+
+6 rows in set (0.00 sec)
+
+mysql> select E.ename from employees E where E.eid in (select C.eid from certified C ,aircraft A where A.cruisingrange>1000 and A.aid=C.aid ) and E.eid not in (select W.eid from certified W ,aircraft B where W.aid=B.aid and B.aname='boeing');
++-------+
+| ename |
++-------+
+| sania |
+| shona |
++-------+
+2 rows in set (0.00 sec)
+
+mysql> select E.ename from employees E where E.eid in (select C.eid from certified C ,aircraft A where A.cruisingrange>1900 and A.aid=C.aid ) and E.eid not in (select W.eid from certified W ,aircraft B where W.aid=B.aid and B.aname='boeing');
++-------+
+| ename |
++-------+
+| sania |
+| shona |
++-------+
+2 rows in set (0.00 sec)
+
+ 
+
+mysql> question 9;
+ 
+ 
+mysql> question 10 ;
+
+ 
+mysql> SELECT E.ename , E.salary from employees E where E.eid not in (select C.eid from certified C )and E.salary>(select avg(A.salary)from employees A , certified B where A.eid=B.eid);
++--------+--------+
+| ename  | salary |
++--------+--------+
+| ritika |  30000 |
+| pawan  |  30500 |
++--------+--------+
+2 rows in set (0.00 sec)
+
+mysql> question 11;
+ 
+ using in 
+mysql> select E.ename from employees E where E.eid in (select C.eid from certified C,aircraft A where A.cruisingrange>1000 and A.aid=C.aid );
++--------+
+| ename  |
++--------+
+| rahul  |
+| sania  |
+| nitara |
+| nipun  |
+| shona  |
++--------+
+5 rows in set (0.01 sec)
+using exists
+mysql> select E.ename from employees E where Exists (select C.eid from certified C,aircraft A where A.cruisingrange>1000 and A.aid=C.aid and E.eid=C.eid);
++--------+
+| ename  |
++--------+
+| rahul  |
+| sania  |
+| nitara |
+| nipun  |
+| shona  |
++--------+
+5 rows in set (0.00 sec)
+
+mysql> question 12;
+mysql> select E.ename from employees E where Exists (select C.eid from certified C,aircraft A where A.cruisingrange<1000 and A.aid=C.aid and E.eid=C.eid group by A.aid having count(A.aid)>2);
+Empty set (0.00 sec)
+
+ 
+mysql> question 13;
+ 
+mysql> select E.ename from employees E where E.eid in (select C.eid from certified C,aircraft A where A.cruisingrange>1000 and A.aid=C.aid and A.aname='boeing' );
++--------+
+| ename  |
++--------+
+| rahul  |
+| nitara |
+| nipun  |
++--------+
+3 rows in set (0.00 sec)
+
+ 
+mysql> question 14;
+ 
+mysql> select E.eid from employees E where E.eid in (SELECT C.eid from certified C ,aircraft A where C.aid = A.aid and A.aname='boeing');
++-----+
+| eid |
++-----+
+|   1 |
+|   7 |
+|  12 |
++-----+
+3 rows in set (0.00 sec)
+
+mysql> question 15;
+ 
+ 
+mysql> select E.ename  from employees E where E.eid in (SELECT C.eid from certified C ,aircraft A where C.aid = A.aid and A.aname='boeing');
++--------+
+| ename  |
++--------+
+| rahul  |
+| nitara |
+| nipun  |
++--------+
+3 rows in set (0.00 sec)
+
+mysql> question 16;
+ 
+mysql> select aid from aircraft where cruisingrange in (select distance from flights where fromplace='hyderabad'and toplace='chennai');
++-----+
+| aid |
++-----+
+|  23 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> question 17;
+
+mysql> select flno from flights where distance in (select A.cruisingrange from aircraft A,certified C  where C.AID=A.AID AND C.EID in  (SELECT EID FROM employees where salary>100000) );
+Empty set (0.00 sec)
+
+mysql> question 18;
+ 
+mysql> SELECT E.ENAME FROM employees E where E.eid in (select C.eid from certified C ,aircraft A where A.aid=C.aid and A.aname<>'boeing'and A.cruisingrange>1900);
++-------+
+| ENAME |
++-------+
+| rahul |
+| sania |
+| nipun |
+| shona |
++-------+
+4 rows in set (0.00 sec)
+
+mysql> questions 19;
+ 
+mysql> select A.eid from employees A where exists(select max(E.salary) from employees E ,certified C,aircraft Q where E.EID=C.EID and A.eid=C.eid and Q.aid=C.aid GROUP BY Q.aname) ;
++-----+
+| eid |
++-----+
+|   1 |
+|   5 |
+|   7 |
+|  12 |
+|  14 |
++-----+
+5 rows in set (0.00 sec)
+
+mysql> question check 20;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'question 20' at line 1
+mysql> SELECT MAX(salary) from employee where eid <>(select eid from employees where salary>all (select salary from employees ));
+ERROR 1146 (42S02): Table 'flight.employee' doesn't exist
+mysql> SELECT MAX(salary) from employees where eid <>(select eid from employees where salary>all (select salary from employees ));
++-------------+
+| MAX(salary) |
++-------------+
+|        NULL |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> (select eid from employees where salary>all (select salary from employees ));
+Empty set (0.00 sec)
+
+mysql> select eid from employees where salary>all (select salary from employees );
+Empty set (0.00 sec)
+
+mysql> select eid from employees having max(salary);
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'flight.employees.eid'; this is incompatible with sql_mode=only_full_group_by
+mysql> select eid from employees group by eid having max(salary);
++-----+
+| eid |
++-----+
+|   1 |
+|   3 |
+|   5 |
+|   7 |
+|  12 |
+|  13 |
+|  14 |
++-----+
+7 rows in set (0.00 sec)
+
+mysql> select eid from employees where salary>all (select salary from employees );
+Empty set (0.00 sec)
+
+mysql> select E.eid from employees E where E.salary>all (select salary from employees );
+Empty set (0.00 sec)
+
+mysql> select E.eid from employees E where E.salary IN  (select MAX(salary) from employees );
++-----+
+| eid |
++-----+
+|  14 |
++-----+
+1 row in set (0.00 sec)
+
+question 20;
+ 
+mysql> select eid from employees where salary in ( select max(W.salary) from employees W where W.eid not in ( select E.eid from employees E where E.salary IN  (select MAX(salary) from employees )));
++-----+
+| eid |
++-----+
+|  13 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> TRIAL question 21;
+ 
+mysql> select * from certified;
++-----+-----+
+| eid | aid |
++-----+-----+
+|   1 |   3 |
+|   1 |  13 |
+|   1 |  32 |
+|   5 |  24 |
+|   5 |  32 |
+|   7 |  23 |
+|  12 |   2 |
+|  12 |  13 |
+|  14 |   2 |
++-----+-----+
+9 rows in set (0.00 sec)
+
+mysql> select aid ,count(*) from certified group by eid ;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'flight.certified.aid' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select aid ,count(eid) from certified group by eid ;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'flight.certified.aid' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> select eid ,count(eid) from certified group by eid ;
++-----+------------+
+| eid | count(eid) |
++-----+------------+
+|   1 |          3 |
+|   5 |          2 |
+|   7 |          1 |
+|  12 |          2 |
+|  14 |          1 |
++-----+------------+
+5 rows in set (0.00 sec)
+
+mysql> create veiw  great (number) as select eid ,count(eid) from certified group by eid ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'veiw  great (number) as select eid ,count(eid) from certified group by eid' at line 1
+mysql> create view  great (number) as select eid ,count(eid) from certified group by eid ;
+ERROR 1353 (HY000): View's SELECT and view's field list have different column counts
+mysql> create view  great(number) as select eid ,count(eid) from certified group by eid ;
+ERROR 1353 (HY000): View's SELECT and view's field list have different column counts
+mysql> create view  great(number) as select  count(eid) from certified group by eid ;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> select max(number) from great;
++-------------+
+| max(number) |
++-------------+
+|           3 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select eid, count(eid) from certified group by eid having max(count (eid)) ;
+ 
+mysql>  CORRECT QUESTION 21;
+ 
+mysql> select eid from certified  group by eid having count(eid)>= all(select count(eid) from certified group by eid ) ;
++-----+
+| eid |
++-----+
+|   1 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> question 22;
+ 
+mysql> select eid from certified group by eid having count(eid)=3;
++-----+
+| eid |
++-----+
+|   1 |
++-----+
+1 row in set (0.00 sec)
+
+mysql> select A.eid from certified A group by A.eid having count(A.eid)>all(select count(B.eid) from certified B GROUP BY B.EID  );
+Empty set (0.00 sec)
+
+mysql> select A.eid from certified A group by A.eid having count(A.eid)>=(select count(B.eid) from certified B GROUP BY B.EID  );
+ERROR 1242 (21000): Subquery returns more than 1 row
+
+mysql> QUESTION 23;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'QUESTION 23' at line 1
+mysql> untee flight.txt
+    -> ;
+
+
+
+
+
+
+mysql> QUESTION 23
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'QUESTION 23' at line 1
+mysql> select * from employee;
+ERROR 1146 (42S02): Table 'flight.employee' doesn't exist
+mysql> select * from employees;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | rahul  |  25000 |
+|   3 | ritika |  30000 |
+|   5 | sania  |  23000 |
+|   7 | nitara |  30000 |
+|  12 | nipun  |  30400 |
+|  13 | pawan  |  30500 |
+|  14 | shona  |  32200 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select avg(A.SALARY)-avg(B.salary) from employee A ,certified C, employee B where A.eid=C.eid ;
+ERROR 1146 (42S02): Table 'flight.employee' doesn't exist
+mysql> select avg(A.SALARY)-avg(B.salary) from employees A ,certified C, employees B where A.eid=C.eid ;
++-----------------------------+
+| avg(A.SALARY)-avg(B.salary) |
++-----------------------------+
+|                  -1617.4603 |
++-----------------------------+
+1 row in set (0.00 sec)
+
+mysql> tee flight.txt
+mysql> QUESTION 9;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'QUESTION 9' at line 1
+mysql> select avg(A.SALARY)-avg(B.salary) from employees A ,certified C, employees B where A.eid=C.eid ;
++-----------------------------+
+| avg(A.SALARY)-avg(B.salary) |
++-----------------------------+
+|                  -1617.4603 |
++-----------------------------+
+1 row in set (0.00 sec)
+
+mysql> QUESTION 23;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'QUESTION 23' at line 1
+mysql> select * from employee;
+ERROR 1146 (42S02): Table 'flight.employee' doesn't exist
+mysql> select * from employees;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | rahul  |  25000 |
+|   3 | ritika |  30000 |
+|   5 | sania  |  23000 |
+|   7 | nitara |  30000 |
+|  12 | nipun  |  30400 |
+|  13 | pawan  |  30500 |
+|  14 | shona  |  32200 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select * from flights;
++------+-------------+----------+----------+----------+----------+-------+
+| flno | fromplace   | toplace  | distance | departs  | arrives  | price |
++------+-------------+----------+----------+----------+----------+-------+
+|    1 | hyderabad   | chennai  |     1200 | 09:30:00 | 11:00:00 |  1500 |
+|    2 | los angeles | chennai  |     2000 | 09:00:00 | 15:00:00 | 15000 |
+|    3 | chennai     | chicago  |     2500 | 02:00:00 | 11:00:00 | 15000 |
+|    5 | los angeles | honolulu |     1923 | 02:00:00 | 01:40:00 |  1200 |
+|    7 | los angeles | chicago  |     1323 | 23:00:00 | 04:40:00 |  2000 |
++------+-------------+----------+----------+----------+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into flights values(6,'chicago','chennai',2500,11:20:00,'12:00:30',15500);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':20:00,'12:00:30',15500)' at line 1
+mysql> insert into flights values(9,'chicago','los angeles',1323,10:00:00,'11:00:30',1550);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':00:00,'11:00:30',1550)' at line 1
+mysql> insert into flights values(4,'chennai','los angeles',2000,11:20:00,'12:00:30',1550);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':20:00,'12:00:30',1550)' at line 1
+mysql> select * from employees;
++-----+--------+--------+
+| eid | ename  | salary |
++-----+--------+--------+
+|   1 | rahul  |  25000 |
+|   3 | ritika |  30000 |
+|   5 | sania  |  23000 |
+|   7 | nitara |  30000 |
+|  12 | nipun  |  30400 |
+|  13 | pawan  |  30500 |
+|  14 | shona  |  32200 |
++-----+--------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select * from flights;
++------+-------------+----------+----------+----------+----------+-------+
+| flno | fromplace   | toplace  | distance | departs  | arrives  | price |
++------+-------------+----------+----------+----------+----------+-------+
+|    1 | hyderabad   | chennai  |     1200 | 09:30:00 | 11:00:00 |  1500 |
+|    2 | los angeles | chennai  |     2000 | 09:00:00 | 15:00:00 | 15000 |
+|    3 | chennai     | chicago  |     2500 | 02:00:00 | 11:00:00 | 15000 |
+|    5 | los angeles | honolulu |     1923 | 02:00:00 | 01:40:00 |  1200 |
+|    7 | los angeles | chicago  |     1323 | 23:00:00 | 04:40:00 |  2000 |
++------+-------------+----------+----------+----------+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> insert into flights values(4,'chennai','los angeles',2000,11:20:00,12:00:30,1550);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':20:00,12:00:30,1550)' at line 1
+mysql> insert into flights values(4,'chennai','los angeles',2000,'11:20:00','12:00:30',1550);
+Query OK, 1 row affected (0.23 sec)
+
+mysql> insert into flights values(9,'chicago','los angeles',1323,'10:00:00','11:00:30',1550);
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into flights values(6,'chicago','chennai',2500,'11:20:00','12:00:30',15500);
+Query OK, 1 row affected (0.05 sec)
+
+mysql> select * from flight;
+ERROR 1146 (42S02): Table 'flight.flight' doesn't exist
+mysql> select * from flights;
++------+-------------+-------------+----------+----------+----------+-------+
+| flno | fromplace   | toplace     | distance | departs  | arrives  | price |
++------+-------------+-------------+----------+----------+----------+-------+
+|    1 | hyderabad   | chennai     |     1200 | 09:30:00 | 11:00:00 |  1500 |
+|    2 | los angeles | chennai     |     2000 | 09:00:00 | 15:00:00 | 15000 |
+|    3 | chennai     | chicago     |     2500 | 02:00:00 | 11:00:00 | 15000 |
+|    4 | chennai     | los angeles |     2000 | 11:20:00 | 12:00:30 |  1550 |
+|    5 | los angeles | honolulu    |     1923 | 02:00:00 | 01:40:00 |  1200 |
+|    6 | chicago     | chennai     |     2500 | 11:20:00 | 12:00:30 | 15500 |
+|    7 | los angeles | chicago     |     1323 | 23:00:00 | 04:40:00 |  2000 |
+|    9 | chicago     | los angeles |     1323 | 10:00:00 | 11:00:30 |  1550 |
++------+-------------+-------------+----------+----------+----------+-------+
+8 rows in set (0.00 sec)
+
+mysql> select sum(salary)from employees where eid in (select C.eid from certified C,aircraft A,flights F where A.aid=C.aid and A.cruisingrange >5000 and F.fromplace='los angeles' and F.toplace in (select Y.fromplace from flights where Y.toplace='chicago')or()  );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')  )' at line 1
+mysql> select sum(salary)from employees where eid in (select C.eid from certified C,aircraft A,flights F where A.aid=C.aid and A.cruisingrange >5000 and F.fromplace='los angeles' and (F.toplace in (select Y.fromplace from flights where Y.toplace='chicago') or F.toplace='chicago')  );
+ERROR 1054 (42S22): Unknown column 'Y.fromplace' in 'field list'
+mysql> select sum(salary)from employees where eid in (select C.eid from certified C,aircraft A,flights F where A.aid=C.aid and A.cruisingrange >5000 and F.fromplace='los angeles' and (F.toplace in (select Y.fromplace from flights Y where Y.toplace='chicago') or F.toplace='chicago')  );
++-------------+
+| sum(salary) |
++-------------+
+|        NULL |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select sum(salary)from employees where eid in (select C.eid from certified C,aircraft A,flights F where A.aid=C.aid and A.cruisingrange >4000 and F.fromplace='los angeles' and (F.toplace in (select Y.fromplace from flights Y where Y.toplace='chicago') or F.toplace='chicago')  );
++-------------+
+| sum(salary) |
++-------------+
+|        NULL |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select sum(salary)from employees where eid in (select C.eid from certified C,aircraft A,flights F where A.aid=C.aid and A.cruisingrange >1000 and F.fromplace='los angeles' and (F.toplace in (select Y.fromplace from flights Y where Y.toplace='chicago') or F.toplace='chicago')  );
++-------------+
+| sum(salary) |
++-------------+
+|      140600 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> QUESTION 24;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'QUESTION 24' at line 1
+mysql> SELECT * from flights;
++------+-------------+-------------+----------+----------+----------+-------+
+| flno | fromplace   | toplace     | distance | departs  | arrives  | price |
++------+-------------+-------------+----------+----------+----------+-------+
+|    1 | hyderabad   | chennai     |     1200 | 09:30:00 | 11:00:00 |  1500 |
+|    2 | los angeles | chennai     |     2000 | 09:00:00 | 15:00:00 | 15000 |
+|    3 | chennai     | chicago     |     2500 | 02:00:00 | 11:00:00 | 15000 |
+|    4 | chennai     | los angeles |     2000 | 11:20:00 | 12:00:30 |  1550 |
+|    5 | los angeles | honolulu    |     1923 | 02:00:00 | 01:40:00 |  1200 |
+|    6 | chicago     | chennai     |     2500 | 11:20:00 | 12:00:30 | 15500 |
+|    7 | los angeles | chicago     |     1323 | 23:00:00 | 04:40:00 |  2000 |
+|    9 | chicago     | los angeles |     1323 | 10:00:00 | 11:00:30 |  1550 |
++------+-------------+-------------+----------+----------+----------+-------+
+8 rows in set (0.00 sec)
+
+mysql> select W.fromplace ,W.toplace ,T.FROMPLACE,T.TOPLACE  FROM flights W,flights R  where (W.fromplace='los angeles' and T.toplace='chicago') or (W.fromplace='los angeles' and W.toplace IN (SELECT fromplace from flights where toplace='chicago' ));
+ERROR 1054 (42S22): Unknown column 'T.FROMPLACE' in 'field list'
+mysql> select W.fromplace ,W.toplace ,T.FROMPLACE,T.TOPLACE  FROM flights W,flights R  where (W.fromplace='los angeles' and T.toplace='chicago') or (W.fromplace='los angeles' and W.toplace IN (SELECT fromplace from flights where toplace='chicago' and toplace=T.toplace and T.fromplace=W.toplace ));
+ERROR 1054 (42S22): Unknown column 'T.FROMPLACE' in 'field list'
+mysql> select W.fromplace ,W.toplace ,T.TOPLACE  FROM flights W,flights R  where (W.fromplace='los angeles' and T.toplace='chicago') or (W.fromplace='los angeles' and W.toplace IN (SELECT fromplace from flights where toplace='chicago' and toplace=T.toplace  ));
+ERROR 1054 (42S22): Unknown column 'T.TOPLACE' in 'field list'
+mysql> select W.fromplace ,W.toplace ,T.TOPLACE  FROM flights W,flights T  where (W.fromplace='los angeles' and T.toplace='chicago') or (W.fromplace='los angeles' and W.toplace IN (SELECT fromplace from flights where toplace='chicago' and toplace=T.toplace  ));
++-------------+----------+---------+
+| fromplace   | toplace  | TOPLACE |
++-------------+----------+---------+
+| los angeles | chennai  | chicago |
+| los angeles | honolulu | chicago |
+| los angeles | chicago  | chicago |
+| los angeles | chennai  | chicago |
+| los angeles | honolulu | chicago |
+| los angeles | chicago  | chicago |
++-------------+----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select W.fromplace ,W.toplace ,T.TOPLACE  FROM flights W,flights T  where (W.fromplace='los angeles' and T.toplace='chicago') or (W.fromplace='los angeles' and W.toplace IN (SELECT fromplace from flights where toplace='chicago' and toplace=W.toplace  ));
++-------------+----------+---------+
+| fromplace   | toplace  | TOPLACE |
++-------------+----------+---------+
+| los angeles | chennai  | chicago |
+| los angeles | honolulu | chicago |
+| los angeles | chicago  | chicago |
+| los angeles | chennai  | chicago |
+| los angeles | honolulu | chicago |
+| los angeles | chicago  | chicago |
++-------------+----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select W.fromplace ,W.toplace ,T.TOPLACE  FROM flights W,flights T  where (W.fromplace='los angeles' and T.toplace='chicago');
++-------------+----------+---------+
+| fromplace   | toplace  | TOPLACE |
++-------------+----------+---------+
+| los angeles | chennai  | chicago |
+| los angeles | honolulu | chicago |
+| los angeles | chicago  | chicago |
+| los angeles | chennai  | chicago |
+| los angeles | honolulu | chicago |
+| los angeles | chicago  | chicago |
++-------------+----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> select W.fromplace ,T.fromplace ,T.TOPLACE  FROM flights W,flights T  where (W.fromplace='los angeles' and T.toplace='chicago') or (W.fromplace='los angeles' and (T.fromplace IN (SELECT fromplace from flights where toplace='chicago' )and T.fromplace in (select toplace from flights where fromplace='los angeles')));
++-------------+-------------+-------------+
+| fromplace   | fromplace   | TOPLACE     |
++-------------+-------------+-------------+
+| los angeles | chennai     | chicago     |
+| los angeles | chennai     | chicago     |
+| los angeles | chennai     | chicago     |
+| los angeles | chennai     | los angeles |
+| los angeles | chennai     | los angeles |
+| los angeles | chennai     | los angeles |
+| los angeles | los angeles | chicago     |
+| los angeles | los angeles | chicago     |
+| los angeles | los angeles | chicago     |
++-------------+-------------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> select W.fromplace ,distinct T.fromplace ,T.TOPLACE  FROM flights W,flights T  where (W.fromplace='los angeles' and T.toplace='chicago') or (W.fromplace='los angeles' and (T.fromplace IN (SELECT fromplace from flights where toplace='chicago' )and T.fromplace in (select toplace from flights where fromplace='los angeles')));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct T.fromplace ,T.TOPLACE  FROM flights W,flights T  where (W.fromplace='l' at line 1
+mysql> select W.fromplace , T.fromplace ,T.TOPLACE  FROM flights W,flights T  where (W.fromplace='los angeles' and T.toplace='chicago') ;
++-------------+-------------+---------+
+| fromplace   | fromplace   | TOPLACE |
++-------------+-------------+---------+
+| los angeles | chennai     | chicago |
+| los angeles | chennai     | chicago |
+| los angeles | chennai     | chicago |
+| los angeles | los angeles | chicago |
+| los angeles | los angeles | chicago |
+| los angeles | los angeles | chicago |
++-------------+-------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> Terminal close -- exit!
+Aborted
+mysql> select sum(E.salary)from employees E,aircraft A ,certified C ,flights where E.eid=C.eid and C.aid=A.AID AND A.cruisingrange=distance and ((select distance from flights where fromplace='los angeles'and toplace='chicago')+(select sum (a1.distance +a2.distance )from flights a1,flights a2 where a1.fromplace='los angeles' and a1.toplace=a2.fromplace and a2.toplace='chicago'))>40000;
+ERROR 1630 (42000): FUNCTION flight.sum does not exist. Check the 'Function Name Parsing and Resolution' section in the Reference Manual
+mysql> (select a.fromplace,a.toplace ,'destination' from flights a where a.fromplace='los angeles 'and a.toplace='chicago')union (select a.fromplace ,b.fromplace,b.toplace from flights a,flights b where a.fromplace='los angeles' and a.toplace=b.fromplace and b.toplace='chicago');
++-------------+---------+-------------+
+| fromplace   | toplace | destination |
++-------------+---------+-------------+
+| los angeles | chicago | destination |
+| los angeles | chennai | chicago     |
++-------------+---------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> select eid from certified ,aircraft where c.aid=a.aid group by aname having max(salary);
+ERROR 1054 (42S22): Unknown column 'c.aid' in 'where clause'
+mysql> select c.eid from certified c ,aircraft a where c.aid=a.aid group by aname having max(salary);
+ERROR 1054 (42S22): Unknown column 'salary' in 'having clause'
+mysql> select c.eid from certified c ,aircraft a,employee  where c.aid=a.aid group by aname having max(salary);
+ERROR 1146 (42S02): Table 'flight.employee' doesn't exist
+mysql> select c.eid from certified c ,aircraft a,employees  where c.aid=a.aid group by aname having max(salary);
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'flight.c.eid' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+mysql> 

@@ -1,0 +1,21 @@
+2015-01-16 15:30:33 DNS Dossier listening on port 1870
+2015-01-16 15:30:33 Socket creation successful
+2015-01-16 15:30:33 Bind successful
+2015-01-16 15:30:54 127.0.0.1 : Requesting to search IP for the domain name www.facebook.com
+2015-01-16 15:30:54 Sending response to client: Domain IP resolved for www.facebook.com
+2015-01-16 15:31:19 Incoming request from client 127.0.0.1 Shutdown DNS Dossier
+2015-01-16 15:31:19 Server shutdown request from 127.0.0.1 : Accepted and Authenticated
+2015-01-16 15:31:19 Saving linked List data base to file
+2015-01-16 15:31:19 Server is going down. Connection will be lost!!
+2015-01-16 15:31:19 Closing Server listening socket
+2015-01-16 15:31:19 Saving the logfile
+
+
+
+www.abcd.com 25 0.0.0.0
+www.yahoo.com 35 98.138.253.109 206.190.36.45  98.139.183.24
+www.apple.com 6 12.2.2.3
+www.google.com 3 64.233.169.99
+www.umd.edu 15 128.8.237.77
+www.komadi.com 0 10.1.11.12
+www.facebook.com 1 31.13.69.160 123.34.5.89

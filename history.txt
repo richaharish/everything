@@ -1,0 +1,4 @@
+pwd
+gedit e.c
+history
+! 4

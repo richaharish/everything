@@ -1,0 +1,480 @@
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> select firstname,lastname,address
+    -> from employ,department
+    -> where DEPNAME='research' and DEPNO=DEPARTMENTNUMBER;
++-----------+----------+---------+
+| firstname | lastname | address |
++-----------+----------+---------+
+| Rupesh    | Bhat     | Mumbai  |
+| Rimi      | Nagi     | Orissa  |
++-----------+----------+---------+
+2 rows in set (0.04 sec)
+
+mysql> SELECT*FROM DEPARTMENT;
+ERROR 1146 (42S02): Table 'company.DEPARTMENT' doesn't exist
+mysql> SELECT*FROM department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT*FROM project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| life            |      4 | delhi        |     24 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+6 rows in set (0.00 sec)
+
+mysql> select PROJNO,DEPNUM,FIRSTNAME,ADDRESS,BIRTHDATE
+    -> FROM project,department,employ
+    -> where DEPNUM=DEPNO AND MANAGERSSN=SSN AND DEPT_LOCATION='JAIPUR';
+ERROR 1054 (42S22): Unknown column 'DEPT_LOCATION' in 'where clause'
+mysql> select PROJNO,DEPNUM,FIRSTNAME,ADDRESS,BIRTHDATE FROM project,department,employ where DEPNUM=DEPNO AND MANAGERSSN=SSN AND PROJ_LOCATION='JAIPUR';
+ERROR 1054 (42S22): Unknown column 'PROJ_LOCATION' in 'where clause'
+mysql> select PROJNO,DEPNUM,FIRSTNAME,ADDRESS,BIRTHDATE FROM project,department,employ where DEPNUM=DEPNO AND MANAGERSSN=SSN AND PROJLOCATION='JAIPUR';
+Empty set (0.00 sec)
+
+mysql> select PROJNO,DEPNUM,FIRSTNAME,ADDRESS,BIRTHDATE FROM project,department,employ where DEPNUM=DEPNO AND MANAGERSSN=SSN AND PROJLOCATION='DELHI';
++--------+--------+-----------+---------+-----------+
+| PROJNO | DEPNUM | FIRSTNAME | ADDRESS | BIRTHDATE |
++--------+--------+-----------+---------+-----------+
+|      4 |     24 | Rimi      | Orissa  | 12-7-1988 |
++--------+--------+-----------+---------+-----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT*FROM dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> desc dependent;
++---------------+----------+------+-----+---------+-------+
+| Field         | Type     | Null | Key | Default | Extra |
++---------------+----------+------+-----+---------+-------+
+| ESSN          | int(11)  | NO   | PRI | NULL    |       |
+| DEPENDENTNAME | char(20) | YES  |     | NULL    |       |
+| GENDER        | char(6)  | YES  |     | NULL    |       |
+| BDATE         | char(10) | YES  |     | NULL    |       |
+| RELATIONSHIP  | char(20) | YES  |     | NULL    |       |
++---------------+----------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> desc WORKS_ON;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| Essn  | int(11) | YES  | MUL | NULL    |       |
+| HOURS | int(11) | YES  |     | NULL    |       |
+| PRONO | int(11) | YES  | MUL | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE WORKS_ON ADD CONSTRAINT PRIMARY KEY(Essn,PRONO);
+Query OK, 0 rows affected (1.37 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc WORKS_ON;
++-------+---------+------+-----+---------+-------+
+| Field | Type    | Null | Key | Default | Extra |
++-------+---------+------+-----+---------+-------+
+| Essn  | int(11) | NO   | PRI | NULL    |       |
+| HOURS | int(11) | YES  |     | NULL    |       |
+| PRONO | int(11) | NO   | PRI | NULL    |       |
++-------+---------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> desc DEPT_LOCATION;
++-----------+----------+------+-----+---------+-------+
+| Field     | Type     | Null | Key | Default | Extra |
++-----------+----------+------+-----+---------+-------+
+| DNO       | int(11)  | NO   | PRI | NULL    |       |
+| DLOCATION | char(20) | NO   | PRI | NULL    |       |
++-----------+----------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> desc dependent;
++---------------+----------+------+-----+---------+-------+
+| Field         | Type     | Null | Key | Default | Extra |
++---------------+----------+------+-----+---------+-------+
+| ESSN          | int(11)  | NO   | PRI | NULL    |       |
+| DEPENDENTNAME | char(20) | YES  |     | NULL    |       |
+| GENDER        | char(6)  | YES  |     | NULL    |       |
+| BDATE         | char(10) | YES  |     | NULL    |       |
+| RELATIONSHIP  | char(20) | YES  |     | NULL    |       |
++---------------+----------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table dependent add constraint primary key(ESSN,DEPENDENTNAME);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> alter table dependent add constraint primary key(DEPENDENTNAME);
+ERROR 1068 (42000): Multiple primary key defined
+mysql> DESC dependent;
++---------------+----------+------+-----+---------+-------+
+| Field         | Type     | Null | Key | Default | Extra |
++---------------+----------+------+-----+---------+-------+
+| ESSN          | int(11)  | NO   | PRI | NULL    |       |
+| DEPENDENTNAME | char(20) | YES  |     | NULL    |       |
+| GENDER        | char(6)  | YES  |     | NULL    |       |
+| BDATE         | char(10) | YES  |     | NULL    |       |
+| RELATIONSHIP  | char(20) | YES  |     | NULL    |       |
++---------------+----------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table dependent drop primary key ;
+ERROR 1025 (HY000): Error on rename of './company/#sql-3b4_5' to './company/dependent' (errno: 150 - Foreign key constraint is incorrectly formed)
+mysql> alter table dependent drop primary key ;
+ERROR 1025 (HY000): Error on rename of './company/#sql-3b4_5' to './company/dependent' (errno: 150 - Foreign key constraint is incorrectly formed)
+mysql> alter table dependent drop foreign key ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> alter table dependent drop foreign key ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> desc dependent;
++---------------+----------+------+-----+---------+-------+
+| Field         | Type     | Null | Key | Default | Extra |
++---------------+----------+------+-----+---------+-------+
+| ESSN          | int(11)  | NO   | PRI | NULL    |       |
+| DEPENDENTNAME | char(20) | YES  |     | NULL    |       |
+| GENDER        | char(6)  | YES  |     | NULL    |       |
+| BDATE         | char(10) | YES  |     | NULL    |       |
+| RELATIONSHIP  | char(20) | YES  |     | NULL    |       |
++---------------+----------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table dependent modify primary key(ESSN,DEPENDENTNAME);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key(ESSN,DEPENDENTNAME)' at line 1
+mysql> alter table dependent CHANGE  primary key(ESSN,DEPENDENTNAME);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key(ESSN,DEPENDENTNAME)' at line 1
+mysql> alter table dependent CHANGE  primary key(ESSN,DEPENDENTNAME);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'primary key(ESSN,DEPENDENTNAME)' at line 1
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> SELECT FIRSTNAME,LASTNAME,ADDRESS
+    -> FROM employ,department
+    -> 
+    -> 
+    -> 
+    -> where DEPNAME='RESEARCH' AND DEPARTMENTNUMBER=DEPNO;
++-----------+----------+---------+
+| FIRSTNAME | LASTNAME | ADDRESS |
++-----------+----------+---------+
+| Rupesh    | Bhat     | Mumbai  |
+| Rimi      | Nagi     | Orissa  |
++-----------+----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> ALTER TABLE dependent drop primary key;
+ERROR 1025 (HY000): Error on rename of './company/#sql-3b4_5' to './company/dependent' (errno: 150 - Foreign key constraint is incorrectly formed)
+mysql> alter table dependent drop foriegn key;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key' at line 1
+mysql> select PROJNO,DEPNO,FIRSTNAME,LASTNAME,ADDRESS,BIRTHDATE
+    -> FROM project,department,employ
+    -> where PROJLOCATION='DELHI' AND DNO=DEPNUM AND MANAGERSSN=SSN;
+ERROR 1054 (42S22): Unknown column 'DNO' in 'where clause'
+mysql> select PROJNO,DEPNO,FIRSTNAME,LASTNAME,ADDRESS,BIRTHDATE FROM project,department,employ where PROJLOCATION='DELHI' AND DEPNUM=DEPNO AND MANAGERSSN=SSN;
++--------+-------+-----------+----------+---------+-----------+
+| PROJNO | DEPNO | FIRSTNAME | LASTNAME | ADDRESS | BIRTHDATE |
++--------+-------+-----------+----------+---------+-----------+
+|      4 |    24 | Rimi      | Nagi     | Orissa  | 12-7-1988 |
++--------+-------+-----------+----------+---------+-----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT employ.FIRSTNAME,ADDRESS 
+    -> FROM employ,department
+    -> WHERE department.DEPNAME='RESEARCH'AND department.DEPNO=employ.DEPARTMENTNUMBER; 
++-----------+---------+
+| FIRSTNAME | ADDRESS |
++-----------+---------+
+| Rupesh    | Mumbai  |
+| Rimi      | Orissa  |
++-----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT E.FIRSTNAME,E.ADDRESS
+    -> FROM employ E,department D
+    -> where D.DEPNAME='RESEARCH'AND D.DEPNO=E.departmentnumber;
++-----------+---------+
+| FIRSTNAME | ADDRESS |
++-----------+---------+
+| Rupesh    | Mumbai  |
+| Rimi      | Orissa  |
++-----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select 
+    -> SSN FROM employ;
++-----+
+| SSN |
++-----+
+|   5 |
+|  15 |
+|  21 |
+|   7 |
+|  12 |
++-----+
+5 rows in set (0.00 sec)
+
+mysql> select ssn,depname
+    -> from employ,department;
++-----+-----------+
+| ssn | depname   |
++-----+-----------+
+|   5 | Math      |
+|  15 | Math      |
+|  21 | Math      |
+|   7 | Math      |
+|  12 | Math      |
+|   5 | Computers |
+|  15 | Computers |
+|  21 | Computers |
+|   7 | Computers |
+|  12 | Computers |
+|   5 | Astronomy |
+|  15 | Astronomy |
+|  21 | Astronomy |
+|   7 | Astronomy |
+|  12 | Astronomy |
+|   5 | Science   |
+|  15 | Science   |
+|  21 | Science   |
+|   7 | Science   |
+|  12 | Science   |
+|   5 | Design    |
+|  15 | Design    |
+|  21 | Design    |
+|   7 | Design    |
+|  12 | Design    |
+|   5 | Research  |
+|  15 | Research  |
+|  21 | Research  |
+|   7 | Research  |
+|  12 | Research  |
++-----+-----------+
+30 rows in set (0.02 sec)
+
+mysql> select all salary 
+    -> from employ;
++--------+
+| salary |
++--------+
+|  59000 |
+|   7605 |
+|  42250 |
+|  99710 |
+|  76050 |
++--------+
+5 rows in set (0.00 sec)
+
+mysql> select distinct salary 
+    -> from employ;
++--------+
+| salary |
++--------+
+|  59000 |
+|   7605 |
+|  42250 |
+|  99710 |
+|  76050 |
++--------+
+5 rows in set (0.00 sec)
+
+mysql> select PROJNO
+    -> FROM project,department,employ
+    -> where DEPNUM=DEPNO AND MANAGERSSN=SSN AND LASTNAME='NEGI';
++--------+
+| PROJNO |
++--------+
+|      5 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select PROJNO FROM project,department,employ where DEPNUM=DEPNO AND MANAGERSSN=SSN AND LASTNAME='NEGI'
+    -> UNION
+    -> SELECT PROJNO FROM project ,WORKS_ON,employ
+    -> where PROJNO=PRONO AND Essn=SSN AND LASTNAME='NEGI';
++--------+
+| PROJNO |
++--------+
+|      5 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select PROJNO FROM project,department,employ where DEPNUM=DEPNO AND MANAGERSSN=SSN AND LASTNAME='NEGI' UNION SELECT PROJNO FROM project ,WORKS_ON,employ where PROJNO=PRONO AND Essn=SSN AND LASTNAME='NAGI';
++--------+
+| PROJNO |
++--------+
+|      5 |
+|      2 |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME
+    -> FROM employ
+    -> where ADDRESS='JAIPUR';
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ where ADDRESS='BANGLORE';
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ where ADDRESS='DELHI';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ where ADDRESS LIKE'%DELHI%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ where ADDRESS LIKE'%D';
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ where ADDRESS LIKE'%D%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ where ADDRESS LIKE'D%';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ where ADDRESS LIKE'%D';
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME
+    -> FROM EMPLOY
+    -> WHERE BIRTHDATE LIKE'___1______';
+ERROR 1146 (42S02): Table 'company.EMPLOY' doesn't exist
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'___1______';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'______2___';
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'______1___';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'_______9__';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'______9__';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rimi      | Nagi     |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'______1___';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'________8_';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'1_________';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| John      | Smith    |
++-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME FROM employ WHERE BIRTHDATE LIKE'1________';
++-----------+----------+
+| FIRSTNAME | LASTNAME |
++-----------+----------+
+| Nikhil    | Negi     |
+| Rimi      | Nagi     |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> untee file.txt
+    -> 

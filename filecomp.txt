@@ -1,0 +1,331 @@
+mysql> create table employ;
+ERROR 1113 (42000): A table must have at least 1 column
+mysql> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> create table employ(FIRSTNAME char(10),MIDDLENAME char(10),LASTNAME char(10),SSN int,BIRTHDATE char(10),ADDRESS char(20),GENDER char(6),SALARY int,SUPER_SSN int,DEPARTMENTNUMBER int);
+Query OK, 0 rows affected (0.83 sec)
+
+mysql> insert alter table employ add primary key(SSN);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'alter table employ add primary key(SSN)' at line 1
+mysql> 
+mysql> insert into employ values('John','B','Smith',12,'12-12-1987','Delhi','male',25000,21,20);
+Query OK, 1 row affected (0.42 sec)
+
+mysql> select*from employ;
++-----------+------------+----------+------+------------+---------+--------+--------+-----------+------------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN  | BIRTHDATE  | ADDRESS | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER |
++-----------+------------+----------+------+------------+---------+--------+--------+-----------+------------------+
+| John      | B          | Smith    |   12 | 12-12-1987 | Delhi   | male   |  25000 |        21 |               20 |
++-----------+------------+----------+------+------------+---------+--------+--------+-----------+------------------+
+1 row in set (0.00 sec)
+
+mysql> alter table employ add primary key(SNN);
+ERROR 1072 (42000): Key column 'SNN' doesn't exist in table
+mysql> alter table employ add primary key(SSN);
+Query OK, 0 rows affected (1.37 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into employ values('Shalini','H','Patel',21,'9-2-1987','Bangalore','female',45000,NULL,20);
+Query OK, 1 row affected (0.16 sec)
+
+mysql> insert into employ values('Rupesh','A','Bhat',7,'9-7-1988','Mumbai','male',4500,15,24);
+Query OK, 1 row affected (0.39 sec)
+
+mysql> insert into employ values('Rimi','J','Nagi',15,'12-7-1988','Orissa','female',59000,NULL,24);
+Query OK, 1 row affected (0.46 sec)
+
+mysql> insert into employ values('Nikhil','P','Negi',5,'12-7-1978','Mumbai','male',59000,NULL,14);
+Query OK, 1 row affected (0.40 sec)
+
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   4500 |        15 |               24 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  25000 |        21 |               20 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  59000 |      NULL |               24 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  45000 |      NULL |               20 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> create table department(DEPNO int,DEPNAME char(10),MANAGERSSN int);
+Query OK, 0 rows affected (0.81 sec)
+
+mysql> insert into department values(14,'Science',5);
+Query OK, 1 row affected (0.41 sec)
+
+mysql> insert into department values(24,'Research',15);
+Query OK, 1 row affected (0.38 sec)
+
+mysql> insert into department values(20,'Design',21);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> alter table department add primary key (DEPNO);
+Query OK, 0 rows affected (1.33 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select*from department;
++-------+----------+------------+
+| DEPNO | DEPNAME  | MANAGERSSN |
++-------+----------+------------+
+|    14 | Science  |          5 |
+|    20 | Design   |         21 |
+|    24 | Research |         15 |
++-------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into department values(1,'Administration',NULL);
+ERROR 1406 (22001): Data too long for column 'DEPNAME' at row 1
+mysql> select*from department;
++-------+----------+------------+
+| DEPNO | DEPNAME  | MANAGERSSN |
++-------+----------+------------+
+|    14 | Science  |          5 |
+|    20 | Design   |         21 |
+|    24 | Research |         15 |
++-------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into department values(1,'Math',NULL);
+Query OK, 1 row affected (0.38 sec)
+
+mysql> insert into department values(14,'Astronomy',7);
+ERROR 1062 (23000): Duplicate entry '14' for key 'PRIMARY'
+mysql> insert into department values(12,'Astronomy',7);
+Query OK, 1 row affected (0.38 sec)
+
+mysql> insert into department values(3,'Computers',12);
+Query OK, 1 row affected (0.40 sec)
+
+mysql> select*from department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> create table DEPT_LOCATION(DNO int,DLOCATION char(20));
+Query OK, 0 rows affected (1.04 sec)
+
+mysql> insert into DEPT_LOCATION values(1,'jaipur');
+Query OK, 1 row affected (0.08 sec)
+
+mysql> insert into DEPT_LOCATION values(3,'surat');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into DEPT_LOCATION values(12,'hyderabad');
+Query OK, 1 row affected (0.07 sec)
+
+mysql> insert into DEPT_LOCATION values(14,'bangalore');
+Query OK, 1 row affected (0.35 sec)
+
+mysql> insert into DEPT_LOCATION values(20,'chennai');
+Query OK, 1 row affected (0.42 sec)
+
+mysql> insert into DEPT_LOCATION values(24,'delhi');
+Query OK, 1 row affected (0.10 sec)
+
+mysql> alter table DEPT_LOCATION add primary key (DNO,DLOCATION);
+Query OK, 0 rows affected (1.45 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select*from DEPT_LOCATION;
++-----+-----------+
+| DNO | DLOCATION |
++-----+-----------+
+|   1 | jaipur    |
+|   3 | surat     |
+|  12 | hyderabad |
+|  14 | bangalore |
+|  20 | chennai   |
+|  24 | delhi     |
++-----+-----------+
+6 rows in set (0.00 sec)
+
+mysql> create table project(PROJNAME char(20),PROJNO int,PROJLOCATION char(20),DEPNUM int );
+Query OK, 0 rows affected (0.78 sec)
+
+mysql> insert into project values('computerization',7,'surat','3');
+Query OK, 1 row affected (0.39 sec)
+
+mysql> alter table project add primary key (PROJNO);
+Query OK, 0 rows affected (1.32 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into project values('blackhole','1','hyderabad',12);
+Query OK, 1 row affected (0.38 sec)
+
+mysql> select*from project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> insert into project value('productx','3','jaipur',1);
+Query OK, 1 row affected (0.38 sec)
+
+mysql> insert into project value('producty','5','bangalore',14);
+Query OK, 1 row affected (0.39 sec)
+
+mysql> insert into project value('innovate','2','chennai',20);
+Query OK, 1 row affected (0.09 sec)
+
+mysql> select*from project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> create table dependent(ESSN int,DEPENDENTNAME char(20),GENDER char(6),BDATE char(10),RELATIONSHIP char(20));
+Query OK, 0 rows affected (0.50 sec)
+
+mysql> insert into dependent values(5,'rimi','female','6-6-2000','daughter');
+Query OK, 1 row affected (0.37 sec)
+
+mysql> alter table dependent add primary key (ESSN);
+Query OK, 0 rows affected (1.47 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select*from dependent;
++------+---------------+--------+----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE    | RELATIONSHIP |
++------+---------------+--------+----------+--------------+
+|    5 | rimi          | female | 6-6-2000 | daughter     |
++------+---------------+--------+----------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   4500 |        15 |               24 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  25000 |        21 |               20 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  59000 |      NULL |               24 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  45000 |      NULL |               20 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into dependent values(7,'lalitha','female','6-6-1990','wife');
+Query OK, 1 row affected (0.39 sec)
+
+mysql> insert into dependent values(12,'kate','female','7-6-1990','sister');
+Query OK, 1 row affected (0.40 sec)
+
+mysql> insert into dependent values(15,'kunal','male','7-2-2012','son');
+Query OK, 1 row affected (0.38 sec)
+
+mysql> 
+mysql> insert into dependent values(21,'prerna','female','12-2-1990','sister');
+Query OK, 1 row affected (0.38 sec)
+
+mysql> select*from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> create table WORKS_ON(Essn int,PRONAME char(20),HOURS int);
+Query OK, 0 rows affected (0.83 sec)
+
+mysql> insert into WORKS_ON values(5,'producty',15);
+Query OK, 1 row affected (0.10 sec)
+
+mysql> select*from dependent;
++------+---------------+--------+-----------+--------------+
+| ESSN | DEPENDENTNAME | GENDER | BDATE     | RELATIONSHIP |
++------+---------------+--------+-----------+--------------+
+|    5 | rimi          | female | 6-6-2000  | daughter     |
+|    7 | lalitha       | female | 6-6-1990  | wife         |
+|   12 | kate          | female | 7-6-1990  | sister       |
+|   15 | kunal         | male   | 7-2-2012  | son          |
+|   21 | prerna        | female | 12-2-1990 | sister       |
++------+---------------+--------+-----------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select*from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   4500 |        15 |               24 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  25000 |        21 |               20 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  59000 |      NULL |               24 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  45000 |      NULL |               20 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> select*from project;
++-----------------+--------+--------------+--------+
+| PROJNAME        | PROJNO | PROJLOCATION | DEPNUM |
++-----------------+--------+--------------+--------+
+| blackhole       |      1 | hyderabad    |     12 |
+| innovate        |      2 | chennai      |     20 |
+| productx        |      3 | jaipur       |      1 |
+| producty        |      5 | bangalore    |     14 |
+| computerization |      7 | surat        |      3 |
++-----------------+--------+--------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select*from DEPT_LOCATION;
++-----+-----------+
+| DNO | DLOCATION |
++-----+-----------+
+|   1 | jaipur    |
+|   3 | surat     |
+|  12 | hyderabad |
+|  14 | bangalore |
+|  20 | chennai   |
+|  24 | delhi     |
++-----+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select*from department;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
+|    20 | Design    |         21 |
+|    24 | Research  |         15 |
++-------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select*from WORKS_ON;
++------+----------+-------+
+| Essn | PRONAME  | HOURS |
++------+----------+-------+
+|    5 | producty |    15 |
++------+----------+-------+
+1 row in set (0.00 sec)
+
+mysql> insert into project values('life',4,'delhi',24);
+Query OK, 1 row affected (0.38 sec)
+
+mysql> untee filecomp.txt
+    ->  
+    -> 

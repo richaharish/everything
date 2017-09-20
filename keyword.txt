@@ -1,0 +1,738 @@
+1:
+mysql> set @count=0;
+Query OK, 0 rows affected (0.00 sec)
+mysql> select e.* from(select t.*,(@count :=@count+1) as seqnum from employ t) e where MOD(seqnum,2)=1;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+------------+--------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO | bd         | seqnum |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+------------+--------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 | 1978-07-12 |     13 |
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 | 1987-12-12 |     15 |
+| nitara    | s          | punj     |  16 | -1971      | mangalore | female |  12000 |         7 |                3 | 998909090 | 1971-12-02 |     17 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+------------+--------+
+3 rows in set (0.00 sec)
+2:
+mysql> set @count=0;
+Query OK, 0 rows affected (0.00 sec)
+mysql> select e.* from(select t.*,(@count :=@count+1) as seqnum from employ t) e where MOD(seqnum,2)=0;
++-----------+------------+----------+-----+-----------+-----------+--------+--------+-----------+------------------+-----------+------------+--------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO | bd         | seqnum |
++-----------+------------+----------+-----+-----------+-----------+--------+--------+-----------+------------------+-----------+------------+--------+
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988  | Mumbai    | male   |   7605 |        15 |               24 |  99897993 | 1988-07-09 |     20 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988 | Orissa    | female |  99710 |      NULL |               24 | 998979342 | 1988-07-12 |     22 |
+| Shalini   | H          | Patel    |  21 | 9-2-1987  | Bangalore | female |  76050 |      NULL |               20 | 998979142 | 1987-02-09 |     24 |
++-----------+------------+----------+-----+-----------+-----------+--------+--------+-----------+------------------+-----------+------------+--------+
+3 rows in set (0.00 sec)
+
+
+
+
+3:
+  select year(bd) from employ ;
++----------+
+| year(bd) |
++----------+
+|     1978 |
+|     1988 |
+|     1987 |
+|     1988 |
+|     1971 |
+|     1987 |
++----------+
+6 rows in set (0.00 sec)
+
+4:
+mysql> select substring(birthdate ,6,9) as year from employ;
++-------+
+| year  |
++-------+
+| 1978  |
+| 988   |
+| -1987 |
+| 1988  |
+|       |
+| 987   |
++-------+t
+6 rows in set (0.00 sec)
+
+ 5:
+mysql> select substring(firstname,1,3) from employ;
++--------------------------+
+| substring(firstname,1,3) |
++--------------------------+
+| Nik                      |
+| Rup                      |
+| Joh                      |
+| Rim                      |
+| nit                      |
+| Sha                      |
++--------------------------+
+
+6 rows in set (0.00 sec)
+
+mysql> select left(firstname,3) from employ;
++-------------------+
+| left(firstname,3) |
++-------------------+
+| Nik               |
+| Rup               |
+| Joh               |
+| Rim               |
+| nit               |
+| Sha               |
++-------------------+
+6 rows in set (0.00 sec)
+
+ 
+6:
+mysql> select bd, if(date_format(bd,'%y-%m-%d'),'is of format yyyy-mm-dd',if(date_format(bd,'%m-%y-%d'),'is of format mm-yyyy-dd',if(date_format(bd,'%d-%m-%y'),'is of format dd-mm-yyyy',' not a date format'))) as date_check from employ;
++------------+-------------------------+
+| bd         | date_check              |
++------------+-------------------------+
+| 1978-07-12 | is of format yyyy-mm-dd |
+| 1988-07-09 | is of format yyyy-mm-dd |
+| 1987-12-12 | is of format yyyy-mm-dd |
+| 1988-07-12 | is of format yyyy-mm-dd |
+| 1971-12-02 | is of format yyyy-mm-dd |
+| 1987-02-09 | is of format yyyy-mm-dd |
++------------+-------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select birthdate, if(date_format(birthdate,'%y-%m-%d'),'is of format yyyy-mm-dd',if(date_format(birthdate,'%m-%y-%d'),'is of format mm-yyyy-dd',if(date_format(birthdate,'%d-%m-%y'),'is of format dd-mm-yyyy',' not a date format'))) as date_check from employ;
++------------+--------------------+
+| birthdate  | date_check         |
++------------+--------------------+
+| 12-7-1978  |  not a date format |
+| 9-7-1988   |  not a date format |
+| 12-12-1987 |  not a date format |
+| 12-7-1988  |  not a date format |
+| -1971      |  not a date format |
+| 9-2-1987   |  not a date format |
++------------+--------------------+
+6 rows in set, 18 warnings (0.00 sec)
+7:
+ 
+
+10:
+mysql> select min(salary) from (select salary from employ order by salary desc limit 3)as e;
++-------------+
+| min(salary) |
++-------------+
+|       59000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select min(salary) from (select salary from employ order by salary desc limit 5)as e;
++-------------+
+| min(salary) |
++-------------+
+|       12000 |
++-------------+
+1 row in set (0.00 sec)
+
+11: 
+ 
+mysql> select salary from employ order by salary desc limit 3;
++--------+
+| salary |
++--------+
+|  99710 |
+|  76050 |
+|  59000 |
++--------+
+3 rows in set (0.00 sec)
+ 
+mysql> select salary from employ;
++--------+
+| salary |
++--------+
+|  59000 |
+|   7605 |
+|  42250 |
+|  99710 |
+|  12000 |
+|  76050 |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> select salary from employ order by salary desc;
++--------+
+| salary |
++--------+
+|  99710 |
+|  76050 |
+|  59000 |
+|  42250 |
+|  12000 |
+|   7605 |
++--------+
+6 rows in set (0.00 sec)
+
+mysql> 
+mysql> select salary from employ order by salary desc limit 4;
++--------+
+| salary |
++--------+
+|  99710 |
+|  76050 |
+|  59000 |
+|  42250 |
++--------+
+4 rows in set (0.00 sec)
+ 
+12:
+mysql> select table_schema "schema",sum( data_length + index_length)/1024/1024"data base size in mb",sum(data_free)/1024/1024"free space in mb" from information_schema.tables group by table_schema;
++--------------------+----------------------+------------------+
+| schema             | data base size in mb | free space in mb |
++--------------------+----------------------+------------------+
+| company            |           0.17187500 |       0.00000000 |
+| flight             |           0.06250000 |       0.00000000 |
+| information_schema |           0.15625000 |      80.00000000 |
+| mysql              |           2.42489624 |       4.00000000 |
+| performance_schema |           0.00000000 |       0.00000000 |
+| sys                |           0.01562500 |       0.00000000 |
++--------------------+----------------------+------------------+
+6 rows in set (0.46 sec)
+ 13:
+mysql> select year(bd) as year  , month(bd) as month,day(bd) as day,bd as birthday from employ;
++------+-------+------+------------+
+| year | month | day  | birthday   |
++------+-------+------+------------+
+| 1978 |     7 |   12 | 1978-07-12 |
+| 1988 |     7 |    9 | 1988-07-09 |
+| 1987 |    12 |   12 | 1987-12-12 |
+| 1988 |     7 |   12 | 1988-07-12 |
+| 1971 |    12 |    2 | 1971-12-02 |
+| 1987 |     2 |    9 | 1987-02-09 |
++------+-------+------+------------+
+6 rows in set (0.00 sec)
+14:
+mysql> select curtime();
++-----------+
+| curtime() |
++-----------+
+| 03:30:31  |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select time(sysdate());
++-----------------+
+| time(sysdate()) |
++-----------------+
+| 03:31:39        |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select current_time();
++----------------+
+| current_time() |
++----------------+
+| 03:31:54       |
++----------------+
+1 row in set (0.00 sec)
+ 
+ERROR 1305 (42000): FUNCTION company.time_stamp does not exist
+mysql> select time(current_timestamp());
++---------------------------+
+| time(current_timestamp()) |
++---------------------------+
+| 03:32:50                  |
++---------------------------+
+1 row in set (0.01 sec)
+
+15:
+
+mysql> select date('1999-12-12 12:00:00');
++-----------------------------+
+| date('1999-12-12 12:00:00') |
++-----------------------------+
+| 1999-12-12                  |
++-----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select time('1999-12-12 12:00:00');
++-----------------------------+
+| time('1999-12-12 12:00:00') |
++-----------------------------+
+| 12:00:00                    |
++-----------------------------+
+1 row in set (0.00 sec)
+16:
+
+mysql> select bd as date,(bd + interval 1 day) as nextdate from employ;
++------------+------------+
+| date       | nextdate   |
++------------+------------+
+| 1978-07-12 | 1978-07-13 |
+| 1988-07-09 | 1988-07-10 |
+| 1987-12-12 | 1987-12-13 |
+| 1988-07-12 | 1988-07-13 |
+| 1971-12-02 | 1971-12-03 |
+| 1987-02-09 | 1987-02-10 |
++------------+------------+
+6 rows in set (0.00 sec)
+
+17:
+
+mysql> select position('a' in 'sundar pitchai');
++-----------------------------------+
+| position('a' in 'sundar pitchai') |
++-----------------------------------+
+|                                 5 |
++-----------------------------------+
+ 
+mysql> select firstname ,locate('a' , firstname) "position of first a " from employ;
++-----------+----------------------+
+| firstname | position of first a  |
++-----------+----------------------+
+| Nikhil    |                    0 |
+| Rupesh    |                    0 |
+| John      |                    0 |
+| Rimi      |                    0 |
+| nitara    |                    4 |
+| Shalini   |                    3 |
++-----------+----------------------+
+6 rows in set (0.00 sec)
+
+1 row in set (0.00 sec)
+
+ 
+
+ 18:
+
+mysql> select ltrim(firstname) from employ;
++------------------+
+| ltrim(firstname) |
++------------------+
+| Nikhil           |
+| Rupesh           |
+| John             |
+| Rimi             |
+| nitara           |
+| Shalini          |
++------------------+
+6 rows in set (0.00 sec)
+19:
+mysql> select firstname,length(firstname) from employ;
++-----------+-------------------+
+| firstname | length(firstname) |
++-----------+-------------------+
+| Nikhil    |                 6 |
+| Rupesh    |                 6 |
+| John      |                 4 |
+| Rimi      |                 4 |
+| nitara    |                 6 |
+| Shalini   |                 7 |
++-----------+-------------------+
+6 rows in set (0.00 sec)
+20:
+
+mysql> select replace(firstname ,'o','*') from employ;
++-----------------------------+
+| replace(firstname ,'o','*') |
++-----------------------------+
+| Nikhil                      |
+| Rupesh                      |
+| J*hn                        |
+| Rimi                        |
+| nitara                      |
+| Shalini                     |
++-----------------------------+
+6 rows in set (0.00 sec)
+
+ //to check whether it is case sensitive
+
+mysql> select replace(firstname ,'j','*') from employ;
++-----------------------------+
+| replace(firstname ,'j','*') |
++-----------------------------+
+| Nikhil                      |
+| Rupesh                      |
+| John                        |
+| Rimi                        |
+| nitara                      |
+| Shalini                     |
++-----------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select replace(firstname ,'j' and 'J','*') from employ;
++-------------------------------------+
+| replace(firstname ,'j' and 'J','*') |
++-------------------------------------+
+| Nikhil                              |
+| Rupesh                              |
+| John                                |
+| Rimi                                |
+| nitara                              |
+| Shalini                             |
++-------------------------------------+
+6 rows in set, 6 warnings (0.00 sec)
+
+mysql> select replace(firstname ,'J','*') from employ;
++-----------------------------+
+| replace(firstname ,'J','*') |
++-----------------------------+
+| Nikhil                      |
+| Rupesh                      |
+| *ohn                        |
+| Rimi                        |
+| nitara                      |
+| Shalini                     |
++-----------------------------+
+6 rows in set (0.00 sec)
+
+21:
+ 
+mysql> SELECT concat(firstname,'_',lastname) as name from employ;
++---------------+
+| name          |
++---------------+
+| Nikhil_Negi   |
+| Rupesh_Bhat   |
+| John_Smith    |
+| Rimi_Nagi     |
+| nitara_punj   |
+| Shalini_Patel |
++---------------+
+6 rows in set (0.00 sec)
+22:
+
+23:
+mysql> select gender ,count(*) from employ where bd between '1980-01-05' and'1990-01-05' group by gender;
++--------+----------+
+| gender | count(*) |
++--------+----------+
+| female |        2 |
+| male   |        2 |
++--------+----------+
+2 rows in set (0.00 sec)
+24:
+
+mysql> select user, authentication_string from mysql.user where user='root' ;
++------+-------------------------------------------+
+| user | authentication_string                     |
++------+-------------------------------------------+
+| root | *08ACDC313B38D98C259FC53AC4FF7BD40728071F |
++------+-------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> select user() ;
++----------------+
+| user()         |
++----------------+
+| root@localhost |
++----------------+
+1 row in set (0.00 sec)
+
+ 
+ 25:
+ 
+mysql> select firstname from employ where firstname like '% % %';
+Empty set (0.00 sec)
+
+mysql> select firstname from employ where firstname like '%';
++-----------+
+| firstname |
++-----------+
+| Nikhil    |
+| Rupesh    |
+| John      |
+| Rimi      |
+| nitara    |
+| Shalini   |
++-----------+
+6 rows in set (0.01 sec)
+
+mysql> select * from employ where firstname like '%n' and length(firstname)=4;
++-----------+------------+----------+-----+------------+---------+--------+--------+-----------+------------------+-----------+------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO | bd         |
++-----------+------------+----------+-----+------------+---------+--------+--------+-----------+------------------+-----------+------------+
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi   | male   |  42250 |        21 |               20 | 998979934 | 1987-12-12 |
++-----------+------------+----------+-----+------------+---------+--------+--------+-----------+------------------+-----------+------------+
+1 row in set (0.00 sec)
+
+mysql> select * from employ where firstname like '___n';
++-----------+------------+----------+-----+------------+---------+--------+--------+-----------+------------------+-----------+------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO | bd         |
++-----------+------------+----------+-----+------------+---------+--------+--------+-----------+------------------+-----------+------------+
+| John      | B          | Smith    |  12 | 12-12-1987 | Delhi   | male   |  42250 |        21 |               20 | 998979934 | 1987-12-12 |
++-----------+------------+----------+-----+------------+---------+--------+--------+-----------+------------------+-----------+------------+
+1 row in set (0.00 sec)
+27:
+
+mysql> select * from employ where month(bd)='01';  
+Empty set (0.00 sec)
+
+mysql> select * from employ where month(bd)='07'; 
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+-----------+------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE | ADDRESS | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO | bd         |
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+-----------+------------+
+| Nikhil    | P          | Negi     |   5 | 12-7-1978 | Mumbai  | male   |  59000 |      NULL |               14 |   9989799 | 1978-07-12 |
+| Rupesh    | A          | Bhat     |   7 | 9-7-1988  | Mumbai  | male   |   7605 |        15 |               24 |  99897993 | 1988-07-09 |
+| Rimi      | J          | Nagi     |  15 | 12-7-1988 | Orissa  | female |  99710 |      NULL |               24 | 998979342 | 1988-07-12 |
++-----------+------------+----------+-----+-----------+---------+--------+--------+-----------+------------------+-----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> # 28:
+ 
+mysql> select date(now());
++-------------+
+| date(now()) |
++-------------+
+| 2017-03-18  |
++-------------+
+1 row in set (0.00 sec)
+
+ 
+mysql> select min(create_time)
+    -> from information_schema.tables
+    -> where table_schema='company';
++---------------------+
+| min(create_time)    |
++---------------------+
+| 2017-01-30 15:18:42 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> select min(create_time) as createtime from information_schema.tables where table_schema='company';
++---------------------+
+| createtime          |
++---------------------+
+| 2017-01-30 15:18:42 |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> #29;
+mysql> #30;
+mysql> select firstname from employ where lastname like '%*%';
+Empty set (0.00 sec)
+
+mysql> select firstname from employ where lastname like '%u%';
++-----------+
+| firstname |
++-----------+
+| nitara    |
++-----------+
+1 row in set (0.00 sec)
+
+mysql> select lastname from employ where lastname like '%u%';
++----------+
+| lastname |
++----------+
+| punj     |
++----------+
+1 row in set (0.00 sec)
+
+mysql> #31;
+mysql> desc department;
++------------+----------+------+-----+---------+-------+
+| Field      | Type     | Null | Key | Default | Extra |
++------------+----------+------+-----+---------+-------+
+| DEPNO      | int(11)  | NO   | PRI | NULL    |       |
+| DEPNAME    | char(10) | YES  |     | NULL    |       |
+| MANAGERSSN | int(11)  | YES  | MUL | NULL    |       |
++------------+----------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> select replace(depname,'',' ') from department 
+    -> ;
++-------------------------+
+| replace(depname,'',' ') |
++-------------------------+
+| Math                    |
+| Computers               |
+| Astronomy               |
+| Science                 |
+| Design                  |
+| Research                |
++-------------------------+
+6 rows in set (0.00 sec)
+
+mysql> #32;
+mysql> select count(*) from employ group by year(bd),month(bd);
++----------+
+| count(*) |
++----------+
+|        1 |
+|        1 |
+|        1 |
+|        1 |
+|        2 |
++----------+
+5 rows in set (0.00 sec)
+
+mysql> select year(bd),month(bd) ,count(*) from employ group by year(bd),month(bd);
++----------+-----------+----------+
+| year(bd) | month(bd) | count(*) |
++----------+-----------+----------+
+|     1971 |        12 |        1 |
+|     1978 |         7 |        1 |
+|     1987 |         2 |        1 |
+|     1987 |        12 |        1 |
+|     1988 |         7 |        2 |
++----------+-----------+----------+
+5 rows in set (0.00 sec)
+
+mysql> #33
+mysql> ;
+ERROR: 
+No query specified
+
+mysql> select substring(depname,3,6) from department;
++------------------------+
+| substring(depname,3,6) |
++------------------------+
+| th                     |
+| mputer                 |
+| tronom                 |
+| ience                  |
+| sign                   |
+| search                 |
++------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select substring(depname,1,3) from department;
++------------------------+
+| substring(depname,1,3) |
++------------------------+
+| Mat                    |
+| Com                    |
+| Ast                    |
+| Sci                    |
+| Des                    |
+| Res                    |
++------------------------+
+6 rows in set (0.00 sec)
+
+mysql> #34;
+mysql> select lower(firstname),lcase(firstname),ucase(lastname),upper(lastname) from employ;
++------------------+------------------+-----------------+-----------------+
+| lower(firstname) | lcase(firstname) | ucase(lastname) | upper(lastname) |
++------------------+------------------+-----------------+-----------------+
+| nikhil           | nikhil           | NEGI            | NEGI            |
+| rupesh           | rupesh           | BHAT            | BHAT            |
+| john             | john             | SMITH           | SMITH           |
+| rimi             | rimi             | NAGI            | NAGI            |
+| nitara           | nitara           | PUNJ            | PUNJ            |
+| shalini          | shalini          | PATEL           | PATEL           |
++------------------+------------------+-----------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> select lower(firstname),lcase(lastname),ucase(firstname),upper(lastname) from employ;
++------------------+-----------------+------------------+-----------------+
+| lower(firstname) | lcase(lastname) | ucase(firstname) | upper(lastname) |
++------------------+-----------------+------------------+-----------------+
+| nikhil           | negi            | NIKHIL           | NEGI            |
+| rupesh           | bhat            | RUPESH           | BHAT            |
+| john             | smith           | JOHN             | SMITH           |
+| rimi             | nagi            | RIMI             | NAGI            |
+| nitara           | punj            | NITARA           | PUNJ            |
+| shalini          | patel           | SHALINI          | PATEL           |
++------------------+-----------------+------------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> update employ set firstname=lower(firstname);
+Query OK, 5 rows affected (1.97 sec)
+Rows matched: 6  Changed: 5  Warnings: 0
+
+mysql> select * from employ;
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+------------+
+| FIRSTNAME | MIDDLENAME | LASTNAME | SSN | BIRTHDATE  | ADDRESS   | GENDER | SALARY | SUPER_SSN | DEPARTMENTNUMBER | MOBILE_NO | bd         |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+------------+
+| nikhil    | P          | Negi     |   5 | 12-7-1978  | Mumbai    | male   |  59000 |      NULL |               14 |   9989799 | 1978-07-12 |
+| rupesh    | A          | Bhat     |   7 | 9-7-1988   | Mumbai    | male   |   7605 |        15 |               24 |  99897993 | 1988-07-09 |
+| john      | B          | Smith    |  12 | 12-12-1987 | Delhi     | male   |  42250 |        21 |               20 | 998979934 | 1987-12-12 |
+| rimi      | J          | Nagi     |  15 | 12-7-1988  | Orissa    | female |  99710 |      NULL |               24 | 998979342 | 1988-07-12 |
+| nitara    | s          | punj     |  16 | -1971      | mangalore | female |  12000 |         7 |                3 | 998909090 | 1971-12-02 |
+| shalini   | H          | Patel    |  21 | 9-2-1987   | Bangalore | female |  76050 |      NULL |               20 | 998979142 | 1987-02-09 |
++-----------+------------+----------+-----+------------+-----------+--------+--------+-----------+------------------+-----------+------------+
+6 rows in set (0.00 sec)
+
+mysql> #35;
+mysql> select 8 from department limit 2;
++---+
+| 8 |
++---+
+| 8 |
+| 8 |
++---+
+2 rows in set (0.00 sec)
+
+mysql> select * from department limit 2;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
++-------+-----------+------------+
+2 rows in set (0.01 sec)
+
+mysql> select * from department limit 4;
++-------+-----------+------------+
+| DEPNO | DEPNAME   | MANAGERSSN |
++-------+-----------+------------+
+|     1 | Math      |       NULL |
+|     3 | Computers |         12 |
+|    12 | Astronomy |          7 |
+|    14 | Science   |          5 |
++-------+-----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> #36;
+mysql> set @counter=0;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @counter:=count(*)-3 from department;
++----------------------+
+| @counter:=count(*)-3 |
++----------------------+
+|                    3 |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> selct * from department limit 3 offset 6;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct * from department limit 3 offset 6' at line 1
+mysql> select * from department limit 3 offset 6;
+Empty set (0.00 sec)
+
+mysql> select * from department limit 2 offset 6;
+Empty set (0.00 sec)
+
+mysql> select * from department limit 3 offset 3;
++-------+----------+------------+
+| DEPNO | DEPNAME  | MANAGERSSN |
++-------+----------+------------+
+|    14 | Science  |          5 |
+|    20 | Design   |         21 |
+|    24 | Research |         15 |
++-------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> #37;
+mysql> select * from employ where ASCII(lower(firstname))=ASCII(upper(firstname));
+Empty set (0.00 sec)
+
+mysql> #38;
+mysql> (select "firstname : ",group_concat(firstname separator ','))
+    -> ;
+ERROR 1054 (42S22): Unknown column 'firstname' in 'field list'
+mysql> (select "firstname : ",group_concat(firstname separator ','))
+    -> ;
+ERROR 1054 (42S22): Unknown column 'firstname' in 'field list'
+mysql> 
+mysql> (select "firstname : ",group_concat(firstname separator ',') from employ) union (select "lastname : ",group_concat(lastname separator ',')from employ);
++--------------+----------------------------------------+
+| firstname :  | group_concat(firstname separator ',')  |
++--------------+----------------------------------------+
+| firstname :  | nikhil,rupesh,john,rimi,nitara,shalini |
+| lastname :   | Negi,Bhat,Smith,Nagi,punj,Patel        |
++--------------+----------------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> #39;
+mysql> create table emptem like employ;
+Query OK, 0 rows affected (1.32 sec)
+
+mysql> select * from emptem;
+Empty set (0.00 sec)
+
+mysql> #40;
